@@ -19,9 +19,9 @@
             <div class="box-body table-responsive">
                 <table class="table table-stiped table-bordered">
                     <thead>
-                        <th width="5%">No</th>
+                        <th>No</th>
                         <th>Kategori</th>
-                        <th width="15%"><i class="fa fa-cog"></i></th>
+                        <th><i class="fa fa-cog"></i></th>
                     </thead>
                 </table>
             </div>

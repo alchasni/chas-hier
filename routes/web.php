@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\{
-    DashboardController,
+use App\Http\Controllers\{DashboardController,
     KategoriController,
     LaporanController,
     ProdukController,
@@ -12,8 +11,8 @@ use App\Http\Controllers\{
     PenjualanController,
     PenjualanDetailController,
     SupplierController,
-    UserController,
-};
+    TransactionController,
+    UserController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +32,10 @@ Route::get('/', function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::group(['middleware' => 'level:1'], function () {
+        Route::get('/api/transaction', [TransactionController::class, 'getTransactionByDate']);
+    });
 
     Route::group(['middleware' => 'level:1'], function () {
         Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');

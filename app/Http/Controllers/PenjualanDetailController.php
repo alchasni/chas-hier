@@ -45,10 +45,10 @@ class PenjualanDetailController extends Controller
             $row = array();
             $row['kode_produk'] = '<span class="label label-success">'. $item->produk['kode_produk'] .'</span';
             $row['nama_produk'] = $item->produk['nama_produk'];
-            $row['harga_jual']  = 'Rp. '. format_uang($item->harga_jual);
+            $row['harga_jual']  = 'Rp. '. money_number_format($item->harga_jual);
             $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_penjualan_detail .'" value="'. $item->jumlah .'">';
             $row['diskon']      = $item->diskon . '%';
-            $row['subtotal']    = 'Rp. '. format_uang($item->subtotal);
+            $row['subtotal']    = 'Rp. '. money_number_format($item->subtotal);
             $row['aksi']        = '<div class="btn-group">
                                     <button onclick="deleteData(`'. route('transaksi.destroy', $item->id_penjualan_detail) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                                 </div>';
@@ -116,12 +116,12 @@ class PenjualanDetailController extends Controller
         $final_price   = $total - ($diskon / 100 * $total);
         $kembali = ($diterima != 0) ? $diterima - $final_price : 0;
         $data    = [
-            'totalrp' => format_uang($total),
+            'totalrp' => money_number_format($total),
             'final_price' => $final_price,
-            'final_pricerp' => format_uang($final_price),
-            'terbilang' => ucwords(terbilang($final_price). ' Rupiah'),
-            'kembalirp' => format_uang($kembali),
-            'kembali_terbilang' => ucwords(terbilang($kembali). ' Rupiah'),
+            'final_pricerp' => money_number_format($final_price),
+            'terbilang' => ucwords(money_written_format($final_price). ' Rupiah'),
+            'kembalirp' => money_number_format($kembali),
+            'kembali_terbilang' => ucwords(money_written_format($kembali). ' Rupiah'),
         ];
 
         return response()->json($data);

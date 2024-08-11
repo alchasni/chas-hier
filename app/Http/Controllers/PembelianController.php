@@ -25,16 +25,16 @@ class PembelianController extends Controller
             ->of($pembelian)
             ->addIndexColumn()
             ->addColumn('total_item', function ($pembelian) {
-                return format_uang($pembelian->total_item);
+                return money_number_format($pembelian->total_item);
             })
             ->addColumn('total_harga', function ($pembelian) {
-                return 'Rp. '. format_uang($pembelian->total_harga);
+                return 'Rp. '. money_number_format($pembelian->total_harga);
             })
             ->addColumn('final_price', function ($pembelian) {
-                return 'Rp. '. format_uang($pembelian->final_price);
+                return 'Rp. '. money_number_format($pembelian->final_price);
             })
             ->addColumn('tanggal', function ($pembelian) {
-                return tanggal_indonesia($pembelian->created_at, false);
+                return to_date_string($pembelian->created_at, false);
             })
             ->addColumn('supplier', function ($pembelian) {
                 return $pembelian->supplier->nama;
@@ -103,13 +103,13 @@ class PembelianController extends Controller
                 return $detail->produk->nama_produk;
             })
             ->addColumn('harga_beli', function ($detail) {
-                return 'Rp. '. format_uang($detail->harga_beli);
+                return 'Rp. '. money_number_format($detail->harga_beli);
             })
             ->addColumn('jumlah', function ($detail) {
-                return format_uang($detail->jumlah);
+                return money_number_format($detail->jumlah);
             })
             ->addColumn('subtotal', function ($detail) {
-                return 'Rp. '. format_uang($detail->subtotal);
+                return 'Rp. '. money_number_format($detail->subtotal);
             })
             ->rawColumns(['kode_produk'])
             ->make(true);

@@ -23,16 +23,16 @@ class PenjualanController extends Controller
             ->of($penjualan)
             ->addIndexColumn()
             ->addColumn('total_item', function ($penjualan) {
-                return format_uang($penjualan->total_item);
+                return money_number_format($penjualan->total_item);
             })
             ->addColumn('total_harga', function ($penjualan) {
-                return 'Rp. '. format_uang($penjualan->total_harga);
+                return 'Rp. '. money_number_format($penjualan->total_harga);
             })
             ->addColumn('final_price', function ($penjualan) {
-                return 'Rp. '. format_uang($penjualan->final_price);
+                return 'Rp. '. money_number_format($penjualan->final_price);
             })
             ->addColumn('tanggal', function ($penjualan) {
-                return tanggal_indonesia($penjualan->created_at, false);
+                return to_date_string($penjualan->created_at, false);
             })
             ->addColumn('kode_member', function ($penjualan) {
                 $guest = $penjualan->guest->kode_member ?? '';
@@ -110,13 +110,13 @@ class PenjualanController extends Controller
                 return $detail->produk->nama_produk;
             })
             ->addColumn('harga_jual', function ($detail) {
-                return 'Rp. '. format_uang($detail->harga_jual);
+                return 'Rp. '. money_number_format($detail->harga_jual);
             })
             ->addColumn('jumlah', function ($detail) {
-                return format_uang($detail->jumlah);
+                return money_number_format($detail->jumlah);
             })
             ->addColumn('subtotal', function ($detail) {
-                return 'Rp. '. format_uang($detail->subtotal);
+                return 'Rp. '. money_number_format($detail->subtotal);
             })
             ->rawColumns(['kode_produk'])
             ->make(true);

@@ -32,7 +32,10 @@
     <!-- Google Font -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('css/layouts.css') }}">
+    @stack('styles')
     @stack('css')
 </head>
 <body class="hold-transition skin-purple-light sidebar-mini">
@@ -51,7 +54,7 @@
                 </h1>
                 <ol class="breadcrumb">
                     @section('breadcrumb')
-                        <li><a href="{{ url('/') }}"><i class="fa fa-dashboard"></i> Home</a></li>
+                        <li><a href="{{ url('/') }}"><i class="fa fa-home"></i> Home</a></li>
                     @show
                 </ol>
             </section>

@@ -20,10 +20,10 @@ class PengeluaranController extends Controller
             ->of($pengeluaran)
             ->addIndexColumn()
             ->addColumn('created_at', function ($pengeluaran) {
-                return tanggal_indonesia($pengeluaran->created_at, false);
+                return to_date_string($pengeluaran->created_at, false);
             })
             ->addColumn('nominal', function ($pengeluaran) {
-                return format_uang($pengeluaran->nominal);
+                return money_number_format($pengeluaran->nominal);
             })
             ->addColumn('aksi', function ($pengeluaran) {
                 return '

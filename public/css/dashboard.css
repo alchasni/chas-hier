@@ -1,0 +1,72 @@
+/* Dark Mode Styles */
+.content,
+.content-header {
+    background-color: #2d2d2d !important; /* Slightly lighter dark background for the body */
+    color: #e0e0e0 !important; /* Light text color */
+}
+
+@media (min-width: 991px) {
+    .breadcrumb a {
+        color: #e0e0e0 !important; /* Dark text color for breadcrumb links */
+    }
+
+    .breadcrumb .active {
+        color: #62be3e !important; /* Slightly lighter text color for the active item */
+    }
+}
+
+
+.title {
+    background-color: #2d2d2d !important; /* Slightly lighter dark background for the title */
+    color: #e0e0e0 !important; /* Light text color */
+}
+
+.box {
+    background-color: #2a2a2a !important; /* Slightly lighter dark background for boxes */
+    border: 1px solid #444 !important; /* Slight border for boxes */
+    color: #e0e0e0 !important; /* Light text color */
+}
+
+.box-header {
+    background-color: #2c2c2c !important; /* Slightly lighter background for header */
+    color: #e0e0e0 !important; /* Light text color */
+}
+
+.box-title {
+    color: #e0e0e0 !important; /* Light text color */
+}
+
+.btn-custom {
+    background-color: #444 !important; /* Dark background for buttons */
+    color: #e0e0e0 !important; /* Light text color */
+}
+
+.btn-custom:hover {
+    background-color: #555 !important; /* Slightly lighter background on hover */
+}
+
+.btn-custom:disabled {
+    background-color: #555 !important; /* Disabled button background */
+    color: #6c757d !important; /* Disabled text color */
+}
+
+.small-box .inner h3, .small-box .inner p {
+    color: #e0e0e0 !important; /* Light text color */
+}
+
+.small-box .small-box-footer {
+    background-color: #555 !important; /* Dark background for footer */
+    color: #e0e0e0 !important; /* Light text color */
+}
+
+.chart {
+    background-color: #2a2a2a !important; /* Slightly lighter dark background for chart container */
+    color: #e0e0e0 !important; /* Light text color */
+    border: 1px solid #444 !important; /* Border around the chart */
+    padding: 10px !important; /* Add padding to the chart container */
+    border-radius: 4px !important; /* Rounded corners for the border */
+}
+
+canvas {
+    background-color: #2a2a2a !important; /* Slightly lighter dark background for chart canvas */
+}

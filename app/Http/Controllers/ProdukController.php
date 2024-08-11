@@ -40,13 +40,13 @@ class ProdukController extends Controller
                 return '<span class="label label-success">'. $produk->kode_produk .'</span>';
             })
             ->addColumn('harga_beli', function ($produk) {
-                return format_uang($produk->harga_beli);
+                return money_number_format($produk->harga_beli);
             })
             ->addColumn('harga_jual', function ($produk) {
-                return format_uang($produk->harga_jual);
+                return money_number_format($produk->harga_jual);
             })
             ->addColumn('stok', function ($produk) {
-                return format_uang($produk->stok);
+                return money_number_format($produk->stok);
             })
             ->addColumn('aksi', function ($produk) {
                 return '
@@ -79,7 +79,7 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $produk = Product::latest()->first() ?? new Product();
-        $request['kode_produk'] = 'P'. tambah_nol_didepan((int)$produk->id_produk +1, 6);
+        $request['kode_produk'] = 'P'. add_zero((int)$produk->id_produk +1, 6);
 
         $produk = Product::create($request->all());
 

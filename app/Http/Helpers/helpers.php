@@ -1,61 +1,59 @@
 <?php
+const MONTH_NAME = [1 => 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const DAY_NAME = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+const NUMBER_NAME = array('', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan', 'sepuluh', 'sebelas');
 
-function format_uang ($angka) {
-    return number_format($angka, 0, ',', '.');
-}
-
-function terbilang ($angka) {
-    $angka = abs($angka);
-    $baca  = array('', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan', 'sepuluh', 'sebelas');
-    $terbilang = '';
-
-    if ($angka < 12) { // 0 - 11
-        $terbilang = ' ' . $baca[$angka];
-    } elseif ($angka < 20) { // 12 - 19
-        $terbilang = terbilang($angka -10) . ' belas';
-    } elseif ($angka < 100) { // 20 - 99
-        $terbilang = terbilang($angka / 10) . ' puluh' . terbilang($angka % 10);
-    } elseif ($angka < 200) { // 100 - 199
-        $terbilang = ' seratus' . terbilang($angka -100);
-    } elseif ($angka < 1000) { // 200 - 999
-        $terbilang = terbilang($angka / 100) . ' ratus' . terbilang($angka % 100);
-    } elseif ($angka < 2000) { // 1.000 - 1.999
-        $terbilang = ' seribu' . terbilang($angka -1000);
-    } elseif ($angka < 1000000) { // 2.000 - 999.999
-        $terbilang = terbilang($angka / 1000) . ' ribu' . terbilang($angka % 1000);
-    } elseif ($angka < 1000000000) { // 1000000 - 999.999.990
-        $terbilang = terbilang($angka / 1000000) . ' juta' . terbilang($angka % 1000000);
-    }
-
-    return $terbilang;
-}
-
-function tanggal_indonesia($tgl, $tampil_hari = true)
+function money_number_format ($number): string
 {
-    $nama_hari  = array(
-        'Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu'
-    );
-    $nama_bulan = array(1 =>
-        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-    );
-
-    $tahun   = substr($tgl, 0, 4);
-    $bulan   = $nama_bulan[(int) substr($tgl, 5, 2)];
-    $tanggal = substr($tgl, 8, 2);
-    $text    = '';
-
-    if ($tampil_hari) {
-        $urutan_hari = date('w', mktime(0,0,0, substr($tgl, 5, 2), $tanggal, $tahun));
-        $hari        = $nama_hari[$urutan_hari];
-        $text       .= "$hari, $tanggal $bulan $tahun";
-    } else {
-        $text       .= "$tanggal $bulan $tahun";
-    }
-    
-    return $text; 
+    return number_format($number, 0, ',', '.');
 }
 
-function tambah_nol_didepan($value, $threshold = null)
+function money_written_format ($number): string
+{
+    $number = abs($number);
+    $text = '';
+
+    if ($number == 0) {
+        return 'nol';
+    } elseif ($number < 12) {
+        $text = NUMBER_NAME[$number];
+    } elseif ($number < 20) {
+        $text = money_written_format($number - 10) . ' belas';
+    } elseif ($number < 100) {
+        $text = money_written_format($number / 10) . ' puluh' . money_written_format($number % 10);
+    } elseif ($number < 200) {
+        $text = ' seratus' . money_written_format($number - 100);
+    } elseif ($number < 1000) {
+        $text = money_written_format($number / 100) . ' ratus' . money_written_format($number % 100);
+    } elseif ($number < 2000) {
+        $text = ' seribu' . money_written_format($number - 1000);
+    } elseif ($number < 1000000) {
+        $text = money_written_format($number / 1000) . ' ribu' . money_written_format($number % 1000);
+    } elseif ($number < 1000000000) {
+        $text = money_written_format($number / 1000000) . ' juta' . money_written_format($number % 1000000);
+    } elseif ($number < 1000000000000) { // 1.000.000.000 - 999.999.999.999
+        $text = money_written_format($number / 1000000000) . ' milyar' . money_written_format($number % 1000000000);
+    }
+
+    // Trim any leading or trailing whitespace
+    return trim($text);
+}
+
+function to_date_string($date, $show_day = true): string
+{
+    $year = substr($date, 0, 4);
+    $month = MONTH_NAME[(int) substr($date, 5, 2)];
+    $day = substr($date, 8, 2);
+
+    if ($show_day) {
+        $dotw = DAY_NAME[(int) date('w', mktime(0,0,0, substr($date, 5, 2), $day, $year))];
+        return "$dotw, $day $month $year";
+    } else {
+        return "$day $month $year";
+    }
+}
+
+function add_zero($value, $threshold = null): string
 {
     return sprintf("%0". $threshold . "s", $value);
 }

@@ -1,0 +1,11 @@
+.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background: #39414d;
+}
+.login-box-body  {
+    background: #313131;
+}

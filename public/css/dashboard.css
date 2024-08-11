@@ -1,5 +1,6 @@
 /* Dark Mode Styles */
 .content,
+.content-wrapper,
 .content-header {
     background-color: #2d2d2d !important; /* Slightly lighter dark background for the body */
     color: #e0e0e0 !important; /* Light text color */
@@ -14,7 +15,20 @@
         color: #62be3e !important; /* Slightly lighter text color for the active item */
     }
 }
+/*TABLE*/
+table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 1px solid #000000 !important; /* Change border color here */
+}
 
+th, td {
+    border: 1px solid #000000 !important;
+    text-align: left !important;
+}
+.box-header.with-border {
+    border-bottom: 3px solid #333333;
+}
 
 .title {
     background-color: #2d2d2d !important; /* Slightly lighter dark background for the title */
@@ -34,11 +48,22 @@
 
 .box-title {
     color: #e0e0e0 !important; /* Light text color */
+    display: flex;
+    align-items: center; /* Align items center */
+    margin: 0; /* Remove margin */
 }
 
 .btn-custom {
     background-color: #444 !important; /* Dark background for buttons */
-    color: #e0e0e0 !important; /* Light text color */
+    color: #62be3e !important; /* Light text color */
+    border: none;
+    border-radius: 50%; /* Rounded buttons */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    cursor: pointer;
+    font-size: 1.2rem; /* Larger font size */
+    height: 33px; /* Fixed height */
+    width: 33px; /* Fixed width */
+    margin: 0 10px; /* Add horizontal margins to space out from text */
 }
 
 .btn-custom:hover {
@@ -69,4 +94,109 @@
 
 canvas {
     background-color: #2a2a2a !important; /* Slightly lighter dark background for chart canvas */
+}
+
+/*FORMS*/
+.modal-content {
+    background-color: #2e2e2e; /* Dark background for the modal */
+    color: #e0e0e0; /* Light text color */
+}
+
+.modal-header {
+    border-bottom: 1px solid #444; /* Slightly lighter border */
+}
+
+.modal-title {
+    color: #e0e0e0; /* Light color for the title */
+}
+
+.modal-body {
+    border: 1px solid #444; /* Border around the body */
+}
+
+.form-control {
+    background-color: #3a3a3a; /* Dark background for input fields */
+    color: #e0e0e0; /* Light text color in input fields */
+    border: 1px solid #555; /* Border color for input fields */
+}
+.close-red {
+    color: #ff0000; /* Red color for the close icon */
+    opacity: 1; /* Ensure the color is visible */
+}
+
+/* Optional: style the close button hover effect */
+.close-red:hover {
+    color: #cc0000; /* Darker red on hover */
+}
+
+.form-control:focus {
+    background-color: #3a3a3a; /* Dark background on focus */
+    border-color: #666; /* Lighter border color on focus */
+    box-shadow: none; /* Remove default focus shadow */
+}
+
+.help-block {
+    color: #e0e0e0; /* Light color for help block text */
+}
+
+/*Index*/
+.btn-group {
+    display: flex; /* Align buttons horizontally */
+}
+
+.btn-group .btn {
+    height: 20px; /* Standard height for buttons (adjust if needed) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+
+.btn-group .btn + .btn {
+    margin-left: 8px;
+}
+.dataTables_paginate {
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.dataTables_paginate .pagination {
+    margin: 0;
+}
+
+.dataTables_paginate .pagination li {
+    display: inline-block;
+    margin: 0 2px;
+}
+
+.dataTables_paginate .pagination li a {
+    color: #e0e0e0; /* Light text color */
+    background-color: #444; /* Slightly lighter background */
+    border: 1px solid #555; /* Border to separate buttons */
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.dataTables_paginate .pagination li a:hover {
+    background-color: #555; /* Highlight color on hover */
+}
+
+.dataTables_paginate .pagination li.active a {
+    background-color: #666; /* Active page background */
+    color: #fff; /* Active page text color */
+}
+
+.dataTables_paginate .pagination li.disabled a {
+    color: #888; /* Disabled text color */
+    cursor: not-allowed;
+}
+
+.dataTables_paginate .pagination li.disabled a:hover {
+    background-color: #444; /* No hover effect on disabled */
 }

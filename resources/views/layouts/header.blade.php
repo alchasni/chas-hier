@@ -11,9 +11,7 @@
         <span class="logo-mini logo-text">{{ $word }}</span>
         <span class="logo-lg logo-text"><b>{{ "NAMA" }}</b></span>
     </a>
-    <!-- Header Navbar -->
     <nav class="navbar navbar-static-top">
-        <!-- Sidebar toggle button-->
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
@@ -44,3 +42,7 @@
         </div>
     </nav>
 </header>
+
+<form action="{{ route('logout') }}" method="post" id="logout-form" style="display: none;">
+    @csrf
+</form>

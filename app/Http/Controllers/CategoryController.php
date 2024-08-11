@@ -2,37 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Category;
 
-class KategoriController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index()
     {
-        return view('kategori.index');
+        return view('category.index');
     }
 
     public function data()
     {
-        $kategori = Category::orderBy('id_kategori', 'desc')->get();
+        $category = Category::orderBy('category_id', 'desc')->get();
 
         return datatables()
-            ->of($kategori)
+            ->of($category)
             ->addIndexColumn()
-            ->addColumn('aksi', function ($kategori) {
+            ->addColumn('action', function ($category) {
                 return '
                 <div class="btn-group">
-                    <button onclick="editForm(`'. route('kategori.update', $kategori->id_kategori) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"></i></button>
-                    <button onclick="deleteData(`'. route('kategori.destroy', $kategori->id_kategori) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                    <button onclick="editForm(`'. route('category.update', $category->category_id) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> edit</i></button>
+                    <button onclick="deleteData(`' . route('category.destroy', $category->category_id) . '`, `' . $category->name . '`)" class="btn btn-xs btn-danger btn-flat">
+                        <i class="fa fa-trash"> delete</i>
+                    </button>
                 </div>
                 ';
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['action'])
             ->make(true);
     }
 
@@ -49,29 +56,25 @@ class KategoriController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        $kategori = new Category();
-        $kategori->nama_kategori = $request->nama_kategori;
-        $kategori->save();
-
-        return response()->json('Data berhasil disimpan', 200);
+        return $this->saveCategory($request, new Category());
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function show($id)
     {
-        $kategori = Category::find($id);
+        $category = Category::find($id);
 
-        return response()->json($kategori);
+        return response()->json($category);
     }
 
     /**
@@ -88,17 +91,19 @@ class KategoriController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
-        $kategori = Category::find($id);
-        $kategori->nama_kategori = $request->nama_kategori;
-        $kategori->update();
+        $category = Category::find($id);
 
-        return response()->json('Data berhasil disimpan', 200);
+        if (!$category) {
+            return response()->json('Error: Category not found.', 404);
+        }
+
+        return $this->saveCategory($request, $category);
     }
 
     /**
@@ -109,9 +114,24 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
-        $kategori = Category::find($id);
-        $kategori->delete();
+        $category = Category::find($id);
+        $category->delete();
 
         return response(null, 204);
+    }
+
+    private function saveCategory(Request $request, Category $category): JsonResponse
+    {
+        try {
+            $category->name = $request->name;
+            $category->save();
+
+            return response()->json('Category data saved', 200);
+        } catch (QueryException $e) {
+            if ($e->getCode() == 23000) {
+                return response()->json('Error: Duplicate entry. The category name already exists.', 409);
+            }
+            return response()->json('Error: Could not save the data. Please try again.', 500);
+        }
     }
 }

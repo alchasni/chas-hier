@@ -29,7 +29,7 @@
             @if (auth()->user()->level < 3)
                 <li class="header">SALES</li>
                 <li>
-                    <a href="{{ route('kategori.index') }}">
+                    <a href="{{ route('category.index') }}">
                         <i class="fa fa-tags"></i> <span>Category</span>
                     </a>
                 </li>

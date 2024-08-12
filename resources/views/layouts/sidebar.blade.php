@@ -34,7 +34,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('produk.index') }}">
+                    <a href="{{ route('product.index') }}">
                         <i class="fa fa-dropbox"></i> <span>Product</span>
                     </a>
                 </li>

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cetak Barcode</title>
-
     <style>
         .text-center {
             text-align: center;
@@ -15,17 +14,19 @@
 <body>
 <table width="100%">
     <tr>
-        @foreach ($dataproduk as $produk)
+        @php $counter = 0; @endphp
+        @foreach ($productData as $product)
             <td class="text-center" style="border: 1px solid #333;">
-                <p>{{ $produk->nama_produk }} - Rp. {{ money_number_format($produk->harga_jual) }}</p>
-                <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($produk->kode_produk, 'C39') }}"
-                     alt="{{ $produk->kode_produk }}"
+                <p>{{ $product->name }} - Rp. {{ money_number_format($product->sell_price) }}</p>
+                <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($product->code, 'C128B') }}"
+                     alt="{{ $product->code }}"
                      width="180"
                      height="60">
                 <br>
-                {{ $produk->kode_produk }}
+                {{ $product->code }}
             </td>
-            @if ($no++ % 3 == 0)
+            @php $counter++; @endphp
+            @if ($counter % 3 == 0)
     </tr>
     <tr>
         @endif

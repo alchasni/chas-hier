@@ -66,8 +66,8 @@
     @foreach ($detail as $key => $item)
         <tr>
             <td class="text-center">{{ $key+1 }}</td>
-            <td>{{ $item->produk->nama_produk }}</td>
-            <td>{{ $item->produk->kode_produk }}</td>
+            <td>{{ $item->product->name }}</td>
+            <td>{{ $item->product->code }}</td>
             <td class="text-right">{{ money_number_format($item->harga_jual) }}</td>
             <td class="text-right">{{ money_number_format($item->jumlah) }}</td>
             <td class="text-right">{{ $item->diskon }}</td>

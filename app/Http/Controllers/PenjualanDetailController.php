@@ -12,7 +12,7 @@ class PenjualanDetailController extends Controller
 {
     public function index()
     {
-        $produk = Product::orderBy('nama_produk')->get();
+        $product = Product::orderBy('name')->get();
         $guest = Guest::orderBy('nama')->get();
         $diskon = 0;
 
@@ -21,7 +21,7 @@ class PenjualanDetailController extends Controller
             $penjualan = Transaction::find($id_penjualan);
             $guestSelected = $penjualan->guest ?? new Guest();
 
-            return view('penjualan_detail.index', compact('produk', 'guest', 'diskon', 'id_penjualan', 'penjualan', 'guestSelected'));
+            return view('penjualan_detail.index', compact('product', 'guest', 'diskon', 'id_penjualan', 'penjualan', 'guestSelected'));
         } else {
             if (auth()->user()->level == 1) {
                 return redirect()->route('transaksi.baru');
@@ -33,7 +33,7 @@ class PenjualanDetailController extends Controller
 
     public function data($id)
     {
-        $detail = TransactionDetail::with('produk')
+        $detail = TransactionDetail::with('product')
             ->where('id_penjualan', $id)
             ->get();
 
@@ -43,8 +43,8 @@ class PenjualanDetailController extends Controller
 
         foreach ($detail as $item) {
             $row = array();
-            $row['kode_produk'] = '<span class="label label-success">'. $item->produk['kode_produk'] .'</span';
-            $row['nama_produk'] = $item->produk['nama_produk'];
+            $row['code'] = '<span class="label label-success">'. $item->product['code'] .'</span';
+            $row['name'] = $item->product['name'];
             $row['harga_jual']  = 'Rp. '. money_number_format($item->harga_jual);
             $row['jumlah']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->id_penjualan_detail .'" value="'. $item->jumlah .'">';
             $row['diskon']      = $item->diskon . '%';
@@ -58,10 +58,10 @@ class PenjualanDetailController extends Controller
             $total_item += $item->jumlah;
         }
         $data[] = [
-            'kode_produk' => '
+            'code' => '
                 <div class="total hide">'. $total .'</div>
                 <div class="total_item hide">'. $total_item .'</div>',
-            'nama_produk' => '',
+            'name' => '',
             'harga_jual'  => '',
             'jumlah'      => '',
             'diskon'      => '',
@@ -72,24 +72,24 @@ class PenjualanDetailController extends Controller
         return datatables()
             ->of($data)
             ->addIndexColumn()
-            ->rawColumns(['aksi', 'kode_produk', 'jumlah'])
+            ->rawColumns(['aksi', 'code', 'jumlah'])
             ->make(true);
     }
 
     public function store(Request $request)
     {
-        $produk = Product::where('id_produk', $request->id_produk)->first();
-        if (! $produk) {
+        $product = Product::where('product_id', $request->product_id)->first();
+        if (! $product) {
             return response()->json('Data gagal disimpan', 400);
         }
 
         $detail = new TransactionDetail();
         $detail->id_penjualan = $request->id_penjualan;
-        $detail->id_produk = $produk->id_produk;
-        $detail->harga_jual = $produk->harga_jual;
+        $detail->product_id = $product->product_id;
+        $detail->harga_jual = $product->harga_jual;
         $detail->jumlah = 1;
         $detail->diskon = 0;
-        $detail->subtotal = $produk->harga_jual;
+        $detail->subtotal = $product->harga_jual;
         $detail->save();
 
         return response()->json('Data berhasil disimpan', 200);

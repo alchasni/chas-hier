@@ -88,9 +88,9 @@ class PenjualanController extends Controller
             $item->diskon = $request->diskon;
             $item->update();
 
-            $produk = Product::find($item->id_produk);
-            $produk->stok -= $item->jumlah;
-            $produk->update();
+            $product = Product::find($item->product_id);
+            $product->stok -= $item->jumlah;
+            $product->update();
         }
 
         return redirect()->route('transaksi.selesai');
@@ -98,16 +98,16 @@ class PenjualanController extends Controller
 
     public function show($id)
     {
-        $detail = TransactionDetail::with('produk')->where('id_penjualan', $id)->get();
+        $detail = TransactionDetail::with('product')->where('id_penjualan', $id)->get();
 
         return datatables()
             ->of($detail)
             ->addIndexColumn()
-            ->addColumn('kode_produk', function ($detail) {
-                return '<span class="label label-success">'. $detail->produk->kode_produk .'</span>';
+            ->addColumn('code', function ($detail) {
+                return '<span class="label label-success">'. $detail->product->code .'</span>';
             })
-            ->addColumn('nama_produk', function ($detail) {
-                return $detail->produk->nama_produk;
+            ->addColumn('name', function ($detail) {
+                return $detail->product->name;
             })
             ->addColumn('harga_jual', function ($detail) {
                 return 'Rp. '. money_number_format($detail->harga_jual);
@@ -118,7 +118,7 @@ class PenjualanController extends Controller
             ->addColumn('subtotal', function ($detail) {
                 return 'Rp. '. money_number_format($detail->subtotal);
             })
-            ->rawColumns(['kode_produk'])
+            ->rawColumns(['code'])
             ->make(true);
     }
 
@@ -127,10 +127,10 @@ class PenjualanController extends Controller
         $penjualan = Transaction::find($id);
         $detail    = TransactionDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
         foreach ($detail as $item) {
-            $produk = Product::find($item->id_produk);
-            if ($produk) {
-                $produk->stok += $item->jumlah;
-                $produk->update();
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $product->stok += $item->jumlah;
+                $product->update();
             }
 
             $item->delete();
@@ -152,7 +152,7 @@ class PenjualanController extends Controller
         if (! $penjualan) {
             abort(404);
         }
-        $detail = TransactionDetail::with('produk')
+        $detail = TransactionDetail::with('product')
             ->where('id_penjualan', session('id_penjualan'))
             ->get();
 
@@ -165,7 +165,7 @@ class PenjualanController extends Controller
         if (! $penjualan) {
             abort(404);
         }
-        $detail = TransactionDetail::with('produk')
+        $detail = TransactionDetail::with('product')
             ->where('id_penjualan', session('id_penjualan'))
             ->get();
 

@@ -54,7 +54,7 @@
                     <p>Products</p>
                 </div>
                 <div class="icon"><i class="fa fa-dropbox"></i></div>
-                <a href="{{ route('produk.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{ route('product.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <div class="col-lg-3 col-xs-6">

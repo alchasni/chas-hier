@@ -14,7 +14,7 @@
         <div class="col-lg-12">
             <div class="box">
                 <div class="box-header with-border">
-                    <button onclick="addForm('{{ route('category.store') }}')" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i></button>
+                    <button onclick="create('{{ route('category.store') }}')" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus-circle"></i></button>
                 </div>
                 <div class="box-body table-responsive">
                     <table class="table table-stiped table-bordered">
@@ -63,7 +63,7 @@
             });
         });
 
-        function addForm(url) {
+        function create(url) {
             $('#modal-form').modal('show');
             $('#modal-form .modal-title').text('Create Category');
 
@@ -87,7 +87,7 @@
                     $('#modal-form [name=name]').val(response.name);
                 })
                 .fail((errors) => {
-                    alert('Tidak dapat menampilkan data');
+                    alert('Failed to show data');
                     return;
                 });
         }
@@ -102,7 +102,7 @@
                         table.ajax.reload();
                     })
                     .fail((errors) => {
-                        alert('Tidak dapat menghapus data');
+                        alert('Failed to delete data');
                         return;
                     });
             }

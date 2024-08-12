@@ -3,7 +3,7 @@
 use App\Http\Controllers\{DashboardController,
     CategoryController,
     LaporanController,
-    ProdukController,
+    ProductController,
     GuestController,
     PengeluaranController,
     PembelianController,
@@ -41,30 +41,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/category/data', [CategoryController::class, 'data'])->name('category.data');
         Route::resource('/category', CategoryController::class);
 
-        Route::get('/produk/data', [ProdukController::class, 'data'])->name('produk.data');
-        Route::post('/produk/delete-selected', [ProdukController::class, 'deleteSelected'])->name('produk.delete_selected');
-        Route::post('/produk/cetak-barcode', [ProdukController::class, 'cetakBarcode'])->name('produk.cetak_barcode');
-        Route::resource('/produk', ProdukController::class);
+        Route::get('/product/data', [ProductController::class, 'data'])->name('product.data');
+        Route::post('/product/barcode', [ProductController::class, 'printBarcode'])->name('product.print_barcode');
+        Route::resource('/product', ProductController::class);
 
-        Route::get('/member/data', [GuestController::class, 'data'])->name('member.data');
-        Route::post('/member/cetak-member', [GuestController::class, 'cetakMember'])->name('member.cetak_member');
-        Route::resource('/member', GuestController::class);
-
-        Route::get('/supplier/data', [SupplierController::class, 'data'])->name('supplier.data');
-        Route::resource('/supplier', SupplierController::class);
-
-        Route::get('/pengeluaran/data', [PengeluaranController::class, 'data'])->name('pengeluaran.data');
-        Route::resource('/pengeluaran', PengeluaranController::class);
-
-        Route::get('/pembelian/data', [PembelianController::class, 'data'])->name('pembelian.data');
-        Route::get('/pembelian/{id}/create', [PembelianController::class, 'create'])->name('pembelian.create');
-        Route::resource('/pembelian', PembelianController::class)
-            ->except('create');
-
-        Route::get('/pembelian_detail/{id}/data', [PembelianDetailController::class, 'data'])->name('pembelian_detail.data');
-        Route::get('/pembelian_detail/loadform/{diskon}/{total}', [PembelianDetailController::class, 'loadForm'])->name('pembelian_detail.load_form');
-        Route::resource('/pembelian_detail', PembelianDetailController::class)
-            ->except('create', 'show', 'edit');
+        Route::get('/guest/data', [GuestController::class, 'data'])->name('guest.data');
+        Route::post('/guest/card', [GuestController::class, 'printCard'])->name('guest.print_card');
+        Route::resource('/guest', GuestController::class);
 
         Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');
         Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');

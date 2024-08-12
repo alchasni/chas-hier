@@ -12,9 +12,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group row">
-                        <label for="nama_produk" class="col-lg-2 col-lg-offset-1 control-label">Nama</label>
+                        <label for="name" class="col-lg-2 col-lg-offset-1 control-label">Nama</label>
                         <div class="col-lg-6">
-                            <input type="text" name="nama_produk" id="nama_produk" class="form-control" required autofocus>
+                            <input type="text" name="name" id="name" class="form-control" required autofocus>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
@@ -31,44 +31,37 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="merk" class="col-lg-2 col-lg-offset-1 control-label">Merk</label>
+                        <label for="buy_price" class="col-lg-2 col-lg-offset-1 control-label">Buy Price</label>
                         <div class="col-lg-6">
-                            <input type="text" name="merk" id="merk" class="form-control">
+                            <input type="number" name="buy_price" id="buy_price" class="form-control" required>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="harga_beli" class="col-lg-2 col-lg-offset-1 control-label">Harga Beli</label>
+                        <label for="sell_price" class="col-lg-2 col-lg-offset-1 control-label">Sell Price</label>
                         <div class="col-lg-6">
-                            <input type="number" name="harga_beli" id="harga_beli" class="form-control" required>
+                            <input type="number" name="sell_price" id="sell_price" class="form-control" required>
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="harga_jual" class="col-lg-2 col-lg-offset-1 control-label">Harga Jual</label>
+                        <label for="discount" class="col-lg-2 col-lg-offset-1 control-label">Discount</label>
                         <div class="col-lg-6">
-                            <input type="number" name="harga_jual" id="harga_jual" class="form-control" required>
+                            <input type="number" name="discount" id="discount" class="form-control" value="0">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="diskon" class="col-lg-2 col-lg-offset-1 control-label">Diskon</label>
+                        <label for="stock" class="col-lg-2 col-lg-offset-1 control-label">Stock</label>
                         <div class="col-lg-6">
-                            <input type="number" name="diskon" id="diskon" class="form-control" value="0">
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="stok" class="col-lg-2 col-lg-offset-1 control-label">Stok</label>
-                        <div class="col-lg-6">
-                            <input type="number" name="stok" id="stok" class="form-control" required value="0">
+                            <input type="number" name="stock" id="stock" class="form-control" required value="0">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan</button>
-                    <button type="button" class="btn btn-sm btn-flat btn-warning" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Batal</button>
+                    <button class="btn btn-sm btn-flat btn-success"><i class="fa fa-save"></i> Save</button>
+                    <button type="button" class="btn btn-sm btn-flat btn-danger" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Cancel</button>
                 </div>
             </div>
         </form>

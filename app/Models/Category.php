@@ -9,6 +9,11 @@ class Category extends Model
 {
     use HasFactory;
 
+    /**
+     * @var mixed
+     */
+    public $name;
+
     protected $table = 'category';
     protected $primaryKey = 'category_id';
     protected $guarded = [];

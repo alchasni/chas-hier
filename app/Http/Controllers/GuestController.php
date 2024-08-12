@@ -25,9 +25,9 @@ class GuestController extends Controller
         return datatables()
             ->of($guest)
             ->addIndexColumn()
-            ->addColumn('select_all', function ($produk) {
+            ->addColumn('select_all', function ($product) {
                 return '
-                    <input type="checkbox" name="id_member[]" value="'. $produk->id_member .'">
+                    <input type="checkbox" name="id_member[]" value="'. $product->id_member .'">
                 ';
             })
             ->addColumn('created_at', function ($guest) {

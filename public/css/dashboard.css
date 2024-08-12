@@ -1,25 +1,24 @@
-/* Dark Mode Styles */
 .content,
 .content-wrapper,
 .content-header {
-    background-color: #2d2d2d !important; /* Slightly lighter dark background for the body */
-    color: #e0e0e0 !important; /* Light text color */
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
 }
 
 @media (min-width: 991px) {
     .breadcrumb a {
-        color: #e0e0e0 !important; /* Dark text color for breadcrumb links */
+        color: #e0e0e0 !important;
     }
 
     .breadcrumb .active {
-        color: #62be3e !important; /* Slightly lighter text color for the active item */
+        color: #62be3e !important;
     }
 }
 /*TABLE*/
 table {
     width: 100% !important;
     border-collapse: collapse !important;
-    border: 1px solid #000000 !important; /* Change border color here */
+    border: 1px solid #000000 !important;
 }
 
 th, td {
@@ -31,121 +30,132 @@ th, td {
 }
 
 .title {
-    background-color: #2d2d2d !important; /* Slightly lighter dark background for the title */
-    color: #e0e0e0 !important; /* Light text color */
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
 }
 
 .box {
-    background-color: #2a2a2a !important; /* Slightly lighter dark background for boxes */
-    border: 1px solid #444 !important; /* Slight border for boxes */
-    color: #e0e0e0 !important; /* Light text color */
+    background-color: #2a2a2a !important;
+    border: 1px solid #444 !important;
+    color: #e0e0e0 !important;
 }
 
 .box-header {
-    background-color: #2c2c2c !important; /* Slightly lighter background for header */
-    color: #e0e0e0 !important; /* Light text color */
+    background-color: #2c2c2c !important;
+    color: #e0e0e0 !important;
 }
 
 .box-title {
-    color: #e0e0e0 !important; /* Light text color */
+    color: #e0e0e0 !important;
     display: flex;
-    align-items: center; /* Align items center */
-    margin: 0; /* Remove margin */
+    align-items: center;
+    margin: 0;
 }
 
 .btn-custom {
-    background-color: #444 !important; /* Dark background for buttons */
-    color: #62be3e !important; /* Light text color */
+    background-color: #444 !important;
+    color: #62be3e !important;
     border: none;
-    border-radius: 50%; /* Rounded buttons */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    font-size: 1.2rem; /* Larger font size */
-    height: 33px; /* Fixed height */
-    width: 33px; /* Fixed width */
-    margin: 0 10px; /* Add horizontal margins to space out from text */
+    font-size: 1.2rem;
+    height: 33px;
+    width: 33px;
+    margin: 0 10px;
 }
 
 .btn-custom:hover {
-    background-color: #555 !important; /* Slightly lighter background on hover */
+    background-color: #555 !important;
 }
 
 .btn-custom:disabled {
-    background-color: #555 !important; /* Disabled button background */
-    color: #6c757d !important; /* Disabled text color */
+    background-color: #555 !important;
+    color: #6c757d !important;
 }
 
 .small-box .inner h3, .small-box .inner p {
-    color: #e0e0e0 !important; /* Light text color */
+    color: #e0e0e0 !important;
 }
 
 .small-box .small-box-footer {
-    background-color: #555 !important; /* Dark background for footer */
-    color: #e0e0e0 !important; /* Light text color */
+    background-color: #555 !important;
+    color: #e0e0e0 !important;
 }
 
 .chart {
-    background-color: #2a2a2a !important; /* Slightly lighter dark background for chart container */
-    color: #e0e0e0 !important; /* Light text color */
-    border: 1px solid #444 !important; /* Border around the chart */
-    padding: 10px !important; /* Add padding to the chart container */
-    border-radius: 4px !important; /* Rounded corners for the border */
+    background-color: #2a2a2a !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #444 !important;
+    padding: 10px !important;
+    border-radius: 4px !important;
 }
 
 canvas {
-    background-color: #2a2a2a !important; /* Slightly lighter dark background for chart canvas */
+    background-color: #2a2a2a !important;
 }
 
 /*FORMS*/
 .modal-content {
-    background-color: #2e2e2e; /* Dark background for the modal */
-    color: #e0e0e0; /* Light text color */
+    background-color: #2e2e2e;
+    color: #e0e0e0;
 }
 
 .modal-header {
-    border-bottom: 1px solid #444; /* Slightly lighter border */
+    border-bottom: 1px solid #444;
 }
 
 .modal-title {
-    color: #e0e0e0; /* Light color for the title */
+    color: #e0e0e0;
 }
 
 .modal-body {
-    border: 1px solid #444; /* Border around the body */
+    border: 1px solid #444;
 }
 
 .form-control {
-    background-color: #3a3a3a; /* Dark background for input fields */
-    color: #e0e0e0; /* Light text color in input fields */
-    border: 1px solid #555; /* Border color for input fields */
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+    border: 1px solid #555;
 }
 .close-red {
-    color: #ff0000; /* Red color for the close icon */
-    opacity: 1; /* Ensure the color is visible */
+    color: #ff0000;
+    opacity: 1;
 }
 
-/* Optional: style the close button hover effect */
 .close-red:hover {
-    color: #cc0000; /* Darker red on hover */
+    color: #cc0000;
 }
 
 .form-control:focus {
-    background-color: #3a3a3a; /* Dark background on focus */
-    border-color: #666; /* Lighter border color on focus */
-    box-shadow: none; /* Remove default focus shadow */
+    background-color: #3a3a3a;
+    border-color: #666;
+    box-shadow: none;
 }
 
 .help-block {
-    color: #e0e0e0; /* Light color for help block text */
+    color: #e0e0e0;
 }
 
-/*Index*/
+.hidden-group {
+    display: none;
+}
+
+#modal-form input:disabled {
+    background-color: #171717;
+    color: #ffd1d1;
+    cursor: not-allowed;
+    border: 1px solid #000000;
+    opacity: 1;
+}
+
+/*INDEX*/
 .btn-group {
-    display: flex; /* Align buttons horizontally */
+    display: flex;
 }
 
 .btn-group .btn {
-    height: 20px; /* Standard height for buttons (adjust if needed) */
+    height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -174,9 +184,9 @@ canvas {
 }
 
 .dataTables_paginate .pagination li a {
-    color: #e0e0e0; /* Light text color */
-    background-color: #444; /* Slightly lighter background */
-    border: 1px solid #555; /* Border to separate buttons */
+    color: #e0e0e0;
+    background-color: #444;
+    border: 1px solid #555;
     padding: 5px 10px;
     border-radius: 4px;
     text-decoration: none;
@@ -184,19 +194,19 @@ canvas {
 }
 
 .dataTables_paginate .pagination li a:hover {
-    background-color: #555; /* Highlight color on hover */
+    background-color: #555;
 }
 
 .dataTables_paginate .pagination li.active a {
-    background-color: #666; /* Active page background */
-    color: #fff; /* Active page text color */
+    background-color: #666;
+    color: #fff;
 }
 
 .dataTables_paginate .pagination li.disabled a {
-    color: #888; /* Disabled text color */
+    color: #888;
     cursor: not-allowed;
 }
 
 .dataTables_paginate .pagination li.disabled a:hover {
-    background-color: #444; /* No hover effect on disabled */
+    background-color: #444;
 }

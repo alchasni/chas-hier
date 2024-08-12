@@ -65,8 +65,8 @@
             dom: 'Brt',
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'kode_produk'},
-                {data: 'nama_produk'},
+                {data: 'code'},
+                {data: 'name'},
                 {data: 'harga_jual'},
                 {data: 'jumlah'},
                 {data: 'subtotal'},

@@ -14,7 +14,7 @@
         <div class="col-lg-12">
             <div class="box">
                 <div class="box-header with-border">
-                    <button onclick="create('{{ route('category.store') }}')" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus-circle"></i></button>
+                    <button onclick="createOne('{{ route('category.store') }}')" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus-circle"></i></button>
                 </div>
                 <div class="box-body table-responsive">
                     <table class="table table-stiped table-bordered">
@@ -63,7 +63,7 @@
             });
         });
 
-        function create(url) {
+        function createOne(url) {
             $('#modal-form').modal('show');
             $('#modal-form .modal-title').text('Create Category');
 
@@ -73,7 +73,7 @@
             $('#modal-form [name=category_name]').focus();
         }
 
-        function editForm(url) {
+        function updateOne(url) {
             $('#modal-form').modal('show');
             $('#modal-form .modal-title').text('Edit Category');
 
@@ -92,7 +92,7 @@
                 });
         }
 
-        function deleteData(url, name) {
+        function deleteOne(url, name) {
             if (confirm(`Are you sure you want to delete "${name}"?`)) {
                 $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),

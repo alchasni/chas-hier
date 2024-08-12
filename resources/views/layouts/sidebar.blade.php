@@ -39,7 +39,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('member.index') }}">
+                    <a href="{{ route('guest.index') }}">
                         <i class="fa fa-id-card"></i> <span>Member</span>
                     </a>
                 </li>

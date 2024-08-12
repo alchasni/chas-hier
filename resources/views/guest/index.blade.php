@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Member
+    Member
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Daftar Member</li>
+    <li class="active">Member</li>
 @endsection
 
 @section('content')
@@ -14,23 +14,21 @@
     <div class="col-lg-12">
         <div class="box">
             <div class="box-header with-border">
-                <button onclick="addForm('{{ route('member.store') }}')" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Tambah</button>
-                <button onclick="cetakMember('{{ route('member.cetak_member') }}')" class="btn btn-info btn-xs btn-flat"><i class="fa fa-id-card"></i> Cetak Member</button>
+                <button onclick="createOne('{{ route('guest.store') }}')" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus-circle"></i></button>
             </div>
             <div class="box-body table-responsive">
-                <form action="" method="post" class="form-member">
+                <form action="" method="post" class="form-guest">
                     @csrf
                     <table class="table table-stiped table-bordered">
                         <thead>
                             <th width="5%">
                                 <input type="checkbox" name="select_all" id="select_all">
                             </th>
-                            <th width="5%">No</th>
-                            <th>Kode</th>
-                            <th>Nama</th>
-                            <th>Telepon</th>
-                            <th>Alamat</th>
-                            <th width="15%"><i class="fa fa-cog"></i></th>
+                            <th>Member Code</th>
+                            <th>Name</th>
+                            <th>Phone Number</th>
+                            <th>Address</th>
+                            <th><i class="fa fa-cog"></i></th>
                         </thead>
                     </table>
                 </form>
@@ -39,7 +37,7 @@
     </div>
 </div>
 
-@includeIf('member.form')
+@includeIf('guest.form')
 @endsection
 
 @push('scripts')
@@ -51,16 +49,15 @@
             processing: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('member.data') }}',
+                url: '{{ route('guest.data') }}',
             },
             columns: [
                 {data: 'select_all', searchable: false, sortable: false},
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'kode_member'},
-                {data: 'nama'},
-                {data: 'telepon'},
-                {data: 'alamat'},
-                {data: 'aksi', searchable: false, sortable: false},
+                {data: 'member_code'},
+                {data: 'name'},
+                {data: 'phone_number'},
+                {data: 'address'},
+                {data: 'action', searchable: false, sortable: false},
             ]
         });
 
@@ -83,39 +80,39 @@
         });
     });
 
-    function addForm(url) {
+    function createOne(url) {
         $('#modal-form').modal('show');
-        $('#modal-form .modal-title').text('Tambah Member');
+        $('#modal-form .modal-title').text('Create Member');
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
         $('#modal-form [name=_method]').val('post');
-        $('#modal-form [name=nama]').focus();
+        $('#modal-form [name=name]').focus();
     }
 
-    function editForm(url) {
+    function updateOne(url) {
         $('#modal-form').modal('show');
         $('#modal-form .modal-title').text('Edit Member');
 
         $('#modal-form form')[0].reset();
         $('#modal-form form').attr('action', url);
         $('#modal-form [name=_method]').val('put');
-        $('#modal-form [name=nama]').focus();
+        $('#modal-form [name=name]').focus();
 
         $.get(url)
             .done((response) => {
-                $('#modal-form [name=nama]').val(response.nama);
-                $('#modal-form [name=telepon]').val(response.telepon);
-                $('#modal-form [name=alamat]').val(response.alamat);
+                $('#modal-form [name=name]').val(response.name);
+                $('#modal-form [name=phone_number]').val(response.phone_number);
+                $('#modal-form [name=address]').val(response.address);
             })
             .fail((errors) => {
-                alert('Tidak dapat menampilkan data');
+                alert('Failed to show data');
                 return;
             });
     }
 
-    function deleteData(url) {
-        if (confirm('Yakin ingin menghapus data terpilih?')) {
+    function deleteOne(url, name) {
+        if (confirm(`Are you sure you want to delete "${name}"?`)) {
             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'delete'
@@ -124,21 +121,9 @@
                     table.ajax.reload();
                 })
                 .fail((errors) => {
-                    alert('Tidak dapat menghapus data');
+                    alert('Failed to delete data');
                     return;
                 });
-        }
-    }
-
-    function cetakMember(url) {
-        if ($('input:checked').length < 1) {
-            alert('Pilih data yang akan dicetak');
-            return;
-        } else {
-            $('.form-member')
-                .attr('target', '_blank')
-                .attr('action', url)
-                .submit();
         }
     }
 </script>

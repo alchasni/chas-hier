@@ -64,7 +64,7 @@
                     <p>Guest</p>
                 </div>
                 <div class="icon"><i class="fa fa-id-card"></i></div>
-                <a href="{{ route('member.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{ route('guest.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <div class="col-lg-3 col-xs-6">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Barryvdh\DomPDF\Facade as PDF;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -25,6 +26,9 @@ class ProductController extends BaseController
         return view('product.index', compact('category'));
     }
 
+    /**
+     * @throws Exception
+     */
     public function data()
     {
         $product = Product::leftJoin('category', 'category.category_id', '=', 'product.category_id')

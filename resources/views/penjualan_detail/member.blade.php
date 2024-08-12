@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-member" tabindex="-1" role="dialog" aria-labelledby="modal-member">
+<div class="modal fade" id="modal-guest" tabindex="-1" role="dialog" aria-labelledby="modal-guest">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,7 +7,7 @@
                 <h4 class="modal-title">Pilih Member</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-striped table-bordered table-member">
+                <table class="table table-striped table-bordered table-guest">
                     <thead>
                         <th width="5%">No</th>
                         <th>Nama</th>
@@ -24,7 +24,7 @@
                                 <td>{{ $item->alamat }}</td>
                                 <td>
                                     <a href="#" class="btn btn-primary btn-xs btn-flat"
-                                        onclick="pilihMember('{{ $item->id_member }}', '{{ $item->kode_member }}')">
+                                        onclick="pilihMember('{{ $item->guest_id }}', '{{ $item->code }}')">
                                         <i class="fa fa-check-circle"></i>
                                         Pilih
                                     </a>

@@ -3,21 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guest;
+use Barryvdh\DomPDF\Facade as PDF;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use PDF;
+use Illuminate\Http\Response;
 
-class GuestController extends Controller
+class GuestController extends BaseController
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
     public function index()
     {
-        return view('member.index');
+        return view('guest.index');
     }
 
+    /**
+     * @throws Exception
+     */
     public function data()
     {
         $guest = Guest::orderBy('created_at')->get();
@@ -25,30 +34,31 @@ class GuestController extends Controller
         return datatables()
             ->of($guest)
             ->addIndexColumn()
-            ->addColumn('select_all', function ($product) {
+            ->addColumn('select_all', function ($guest) {
                 return '
-                    <input type="checkbox" name="id_member[]" value="'. $product->id_member .'">
+                    <input type="checkbox" name="guest_id[]" value="'. $guest->guest_id .'">
                 ';
             })
-            ->addColumn('created_at', function ($guest) {
-                return '<span class="label label-success">'. $guest->created_at .'<span>';
-            })
-            ->addColumn('aksi', function ($guest) {
+            ->addColumn('action', function ($guest) {
                 return '
                 <div class="btn-group">
-                    <button type="button" onclick="editForm(`'. route('member.update', $guest->id_member) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"></i></button>
-                    <button type="button" onclick="deleteData(`'. route('member.destroy', $guest->id_member) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                    <button type="button" onclick="updateOne(`'. route('guest.update', $guest->guest_id) .'`)" class="btn btn-xs btn-info btn-flat">
+                        <i class="fa fa-pencil"> edit</i>
+                    </button>
+                    <button type="button" onclick="deleteOne(`' . route('guest.destroy', $guest->guest_id) . '`, `' . $guest->name . '`)" class="btn btn-xs btn-danger btn-flat">
+                        <i class="fa fa-trash"> delete</i>
+                    </button>
                 </div>
                 ';
             })
-            ->rawColumns(['aksi', 'select_all', 'created_at'])
+            ->rawColumns(['action', 'select_all', 'created_at'])
             ->make(true);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -58,31 +68,25 @@ class GuestController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $guest = Guest::latest()->first() ?? new Guest();
-        $guest = new Guest();
-        $guest->nama = $request->nama;
-        $guest->telepon = $request->telepon;
-        $guest->alamat = $request->alamat;
-        $guest->save();
-
-        return response()->json('Data berhasil disimpan', 200);
+        $request['member_code'] = 'M'. add_zero((int)$guest->guest_id +1, 6);
+        return $this->saveModel($request, new Guest());
     }
 
     /**
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function show($id)
+    public function show(int $id): JsonResponse
     {
         $guest = Guest::find($id);
-
         return response()->json($guest);
     }
 
@@ -90,9 +94,9 @@ class GuestController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function edit($id)
+    public function edit(int $id)
     {
         //
     }
@@ -100,44 +104,30 @@ class GuestController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): JsonResponse
     {
-        $guest = Guest::find($id)->update($request->all());
-
-        return response()->json('Data berhasil disimpan', 200);
+        $guest = Guest::find($id);
+        if (!$guest) {
+            return response()->json('Error: Guest not found.', 404);
+        }
+        return $this->saveModel($request, $guest);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function destroy($id)
+    public function destroy(int $id): Response
     {
         $guest = Guest::find($id);
         $guest->delete();
 
         return response(null, 204);
-    }
-
-    public function cetakMember(Request $request)
-    {
-        $datamember = collect(array());
-        foreach ($request->id_member as $id) {
-            $guest = Guest::find($id);
-            $datamember[] = $guest;
-        }
-
-        $datamember = $datamember->chunk(2);
-
-        $no  = 1;
-        $pdf = PDF::loadView('member.cetak', compact('datamember', 'no'));
-        $pdf->setPaper(array(0, 0, 566.93, 850.39), 'potrait');
-        return $pdf->stream('member.pdf');
     }
 }

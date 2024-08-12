@@ -169,9 +169,9 @@
 
         function printBarcode(url) {
             if ($('input:checked').length < 1) {
-                alert('Select the data to print');
+                alert('Select the product to print');
             } else if ($('input:checked').length < 3) {
-                alert('Select at least 3 data to print');
+                alert('Select at least 3 to print');
             } else {
                 $('.form-product')
                     .attr('target', '_blank')

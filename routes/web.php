@@ -46,7 +46,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/product', ProductController::class);
 
         Route::get('/guest/data', [GuestController::class, 'data'])->name('guest.data');
-        Route::post('/guest/card', [GuestController::class, 'printCard'])->name('guest.print_card');
         Route::resource('/guest', GuestController::class);
 
         Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');

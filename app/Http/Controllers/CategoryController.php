@@ -36,8 +36,10 @@ class CategoryController extends BaseController
             ->addColumn('action', function ($category) {
                 return '
                 <div class="btn-group">
-                    <button onclick="editForm(`'. route('category.update', $category->category_id) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"> edit</i></button>
-                    <button onclick="deleteData(`' . route('category.destroy', $category->category_id) . '`, `' . $category->name . '`)" class="btn btn-xs btn-danger btn-flat">
+                    <button type="button" onclick="updateOne(`'. route('category.update', $category->category_id) .'`)" class="btn btn-xs btn-info btn-flat">
+                        <i class="fa fa-pencil"> edit</i>
+                    </button>
+                    <button type="button" onclick="deleteOne(`' . route('category.destroy', $category->category_id) . '`, `' . $category->name . '`)" class="btn btn-xs btn-danger btn-flat">
                         <i class="fa fa-trash"> delete</i>
                     </button>
                 </div>

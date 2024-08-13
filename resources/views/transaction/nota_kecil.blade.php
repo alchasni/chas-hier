@@ -76,9 +76,9 @@
             <td colspan="3">{{ $item->product->name }}</td>
         </tr>
         <tr>
-            <td>{{ $item->jumlah }} x {{ money_number_format($item->harga_jual) }}</td>
+            <td>{{ $item->quantity }} x {{ money_number_format($item->sell_price) }}</td>
             <td></td>
-            <td class="text-right">{{ money_number_format($item->jumlah * $item->harga_jual) }}</td>
+            <td class="text-right">{{ money_number_format($item->quantity * $item->sell_price) }}</td>
         </tr>
     @endforeach
 </table>

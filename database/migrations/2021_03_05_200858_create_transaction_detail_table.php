@@ -22,6 +22,8 @@ class CreateTransactionDetailTable extends Migration
             $table->tinyInteger('discount')->default(0);
             $table->integer('price')->unsigned();
             $table->timestamps();
+
+            $table->index('transaction_id');
         });
     }
 

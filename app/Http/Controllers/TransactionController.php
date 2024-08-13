@@ -2,14 +2,216 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Guest;
 use App\Models\Transaction;
+use App\Models\TransactionDetail;
+use App\Models\Product;
 use DateTime;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
-    public function getTransactionByDate(Request $request)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Application|Factory|View
+     */
+    public function index()
+    {
+        return view('transaction.index');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function data()
+    {
+        $transaction = Transaction::with('guest')
+            ->where('is_temp', false)
+            ->orderBy('transaction_id', 'desc')
+            ->get();
+
+        return datatables()
+            ->of($transaction)
+            ->addIndexColumn()
+            ->addColumn('total_item_quantity', function ($transaction) {
+                return money_number_format($transaction->total_item_quantity);
+            })
+            ->addColumn('total_price', function ($transaction) {
+                return 'Rp. '. money_number_format($transaction->total_price);
+            })
+            ->addColumn('final_price', function ($transaction) {
+                return 'Rp. '. money_number_format($transaction->final_price);
+            })
+            ->addColumn('date', function ($transaction) {
+                return to_date_string($transaction->created_at, false);
+            })
+            ->addColumn('member_code', function ($transaction) {
+                $guest = $transaction->guest->member_code ?? '';
+                return '<span class="label label-success">'. $guest .'</spa>';
+            })
+            ->editColumn('discount', function ($transaction) {
+                return $transaction->discount . '%';
+            })
+            ->editColumn('user_name', function ($transaction) {
+                return $transaction->user->name ?? '';
+            })
+            ->addColumn('action', function ($transaction) {
+                return '
+                <div class="btn-group">
+                    <button onclick="showDetail(`'. route('transaction.show', $transaction->transaction_id) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
+                    <button onclick="deleteData(`'. route('transaction.destroy', $transaction->transaction_id) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                </div>
+                ';
+            })
+            ->rawColumns(['action', 'member_code'])
+            ->make(true);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return RedirectResponse
+     */
+    public function create(): RedirectResponse
+    {
+        $transaction = Transaction::where('is_temp', true)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if (!$transaction) {
+            $transaction = new Transaction();
+            $transaction->guest_id = null;
+            $transaction->total_item_quantity = 0;
+            $transaction->total_price = 0;
+            $transaction->discount = 0;
+            $transaction->final_price = 0;
+            $transaction->money_received = 0;
+            $transaction->user_id = auth()->id();
+            $transaction->is_temp = true;
+            $transaction->save();
+        }
+
+        session(['transaction_id' => $transaction->transaction_id]);
+        return redirect()->route('transaction_detail.index');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $transaction = Transaction::findOrFail($request->transaction_id);
+        $transaction->guest_id = $request->guest_id;
+        $transaction->total_item_quantity = $request->total_item_quantity;
+        $transaction->total_price = $request->total_price;
+        $transaction->discount = $request->discount;
+        $transaction->final_price = $request->final_price;
+        $transaction->money_received = $request->money_received;
+        $transaction->is_temp = false;
+        $transaction->update();
+
+        $detail = TransactionDetail::where('transaction_id', $transaction->transaction_id)->get();
+        foreach ($detail as $item) {
+            $item->discount = $request->discount;
+            $item->update();
+
+            $product = Product::find($item->product_id);
+            $product->stock -= $item->quantity;
+            $product->update();
+        }
+
+        return redirect()->route('transaction.selesai');
+    }
+
+    public function show($id)
+    {
+        $detail = TransactionDetail::with('product')->where('transaction_id', $id)->get();
+
+        return datatables()
+            ->of($detail)
+            ->addIndexColumn()
+            ->addColumn('code', function ($detail) {
+                return '<span class="label label-success">'. $detail->product->code .'</span>';
+            })
+            ->addColumn('name', function ($detail) {
+                return $detail->product->name;
+            })
+            ->addColumn('sell_price', function ($detail) {
+                return 'Rp. '. money_number_format($detail->sell_price);
+            })
+            ->addColumn('quantity', function ($detail) {
+                return money_number_format($detail->quantity);
+            })
+            ->addColumn('price', function ($detail) {
+                return 'Rp. '. money_number_format($detail->price);
+            })
+            ->rawColumns(['code'])
+            ->make(true);
+    }
+
+    public function destroy($id)
+    {
+        $transaction = Transaction::find($id);
+        $detail    = TransactionDetail::where('transaction_id', $transaction->transaction_id)->get();
+        foreach ($detail as $item) {
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $product->stock += $item->quantity;
+                $product->update();
+            }
+
+            $item->delete();
+        }
+
+        $transaction->delete();
+
+        return response(null, 204);
+    }
+
+    public function selesai()
+    {
+        return view('transaction.selesai');
+    }
+
+    public function notaKecil()
+    {
+        $transaction = Transaction::find(session('transaction_id'));
+        if (! $transaction) {
+            abort(404);
+        }
+        $detail = TransactionDetail::with('product')
+            ->where('transaction_id', session('transaction_id'))
+            ->get();
+
+        return view('transaction.nota_kecil', compact('transaction', 'detail'));
+    }
+
+    public function notaBesar()
+    {
+        $transaction = Transaction::find(session('transaction_id'));
+        if (! $transaction) {
+            abort(404);
+        }
+        $detail = TransactionDetail::with('product')
+            ->where('transaction_id', session('transaction_id'))
+            ->get();
+
+        $pdf = PDF::loadView('transaction.nota_besar', compact('transaction', 'detail'));
+        $pdf->setPaper(0,0,609,440, 'potrait');
+        return $pdf->stream('transaction-'. date('Y-m-d-his') .'.pdf');
+    }
+
+    public function getTransactionByDate(Request $request): \Illuminate\Http\JsonResponse
     {
         $month = $request->input('month');
         $year = $request->input('year');

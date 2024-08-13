@@ -68,21 +68,21 @@
             <td class="text-center">{{ $key+1 }}</td>
             <td>{{ $item->product->name }}</td>
             <td>{{ $item->product->code }}</td>
-            <td class="text-right">{{ money_number_format($item->harga_jual) }}</td>
-            <td class="text-right">{{ money_number_format($item->jumlah) }}</td>
-            <td class="text-right">{{ $item->diskon }}</td>
-            <td class="text-right">{{ money_number_format($item->subtotal) }}</td>
+            <td class="text-right">{{ money_number_format($item->sell_price) }}</td>
+            <td class="text-right">{{ money_number_format($item->quantity) }}</td>
+            <td class="text-right">{{ $item->discount }}</td>
+            <td class="text-right">{{ money_number_format($item->price) }}</td>
         </tr>
     @endforeach
     </tbody>
     <tfoot>
     <tr>
         <td colspan="6" class="text-right"><b>Total Harga</b></td>
-        <td class="text-right"><b>{{ money_number_format($penjualan->total_harga) }}</b></td>
+        <td class="text-right"><b>{{ money_number_format($penjualan->total_price) }}</b></td>
     </tr>
     <tr>
         <td colspan="6" class="text-right"><b>Diskon</b></td>
-        <td class="text-right"><b>{{ money_number_format($penjualan->diskon) }}</b></td>
+        <td class="text-right"><b>{{ money_number_format($penjualan->discount) }}</b></td>
     </tr>
     <tr>
         <td colspan="6" class="text-right"><b>Total Bayar</b></td>

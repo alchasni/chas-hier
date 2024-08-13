@@ -74,7 +74,7 @@
                     <p>Today's Transaction</p>
                 </div>
                 <div class="icon"><i class="fa fa-money"></i></div>
-                <a href="{{ route('penjualan.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{ route('transaction.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>
@@ -87,6 +87,12 @@
 @push('scripts')
     <script src="{{ asset('AdminLTE-2/bower_components/chart.js/Chart.js') }}"></script>
     <script>
+
+        Swal.fire({
+            title: "Good job!",
+            text: "You clicked the button!",
+            icon: "success"
+        });
         $(function () {
             var salesChartCanvas = $('#salesChart').get(0).getContext('2d');
             var salesChart = new Chart(salesChartCanvas);

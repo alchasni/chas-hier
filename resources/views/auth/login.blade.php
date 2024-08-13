@@ -30,10 +30,18 @@
                         </label>
                     </div>
                 </div>
-                <div class="form-group" style="margin-top: 20px;"> <!-- Adjust the margin as needed -->
+                <div class="form-group" style="margin-top: 20px;">
                     <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
                 </div>
             </form>
         </div>
     </div>
+
+    @if (session('errors'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                alert("{{ session('errors')->first() }}");
+            });
+        </script>
+    @endif
 @endsection

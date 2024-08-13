@@ -24,7 +24,14 @@ table {
 th, td {
     border: 1px solid #000000 !important;
     text-align: left !important;
+    padding: 8px !important;
 }
+
+th {
+    background-color: #444 !important;
+    color: #e0e0e0 !important;
+}
+
 .box-header.with-border {
     border-bottom: 3px solid #333333;
 }
@@ -118,13 +125,13 @@ canvas {
     color: #e0e0e0;
     border: 1px solid #555;
 }
-.close-red {
-    color: #ff0000;
-    opacity: 1;
+.close {
+    color: #e0e0e0 !important;
+    opacity: 1 !important;
 }
 
-.close-red:hover {
-    color: #cc0000;
+.close:hover {
+    color: #ff0000 !important;
 }
 
 .form-control:focus {
@@ -147,6 +154,13 @@ canvas {
     cursor: not-allowed;
     border: 1px solid #000000;
     opacity: 1;
+}
+
+input:read-only {
+    background-color: #171717 !important;
+    color: #ddffd1 !important;
+    border: 1px solid #000000 !important;
+    opacity: 1 !important;
 }
 
 /*INDEX*/
@@ -209,4 +223,46 @@ canvas {
 
 .dataTables_paginate .pagination li.disabled a:hover {
     background-color: #444;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #2d2d2d !important;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #292929 !important;
+}
+
+tbody tr:hover {
+    background-color: #3a3a3a !important;
+}
+
+/*POPUP TABLE*/
+/* Modal */
+.modal-content {
+    background-color: #2e2e2e !important;
+    color: #e0e0e0 !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid #444 !important;
+}
+
+.modal-title {
+    color: #e0e0e0 !important;
+}
+
+.modal-body {
+    border: 1px solid #444 !important;
+}
+
+/* Button */
+.btn-primary.btn-xs.btn-flat {
+    background-color: #444 !important;
+    border-color: #555 !important;
+    color: #e0e0e0 !important;
+}
+
+.btn-primary.btn-xs.btn-flat:hover {
+    background-color: #555 !important;
 }

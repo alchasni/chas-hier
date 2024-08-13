@@ -44,7 +44,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('penjualan.index') }}">
+                    <a href="{{ route('transaction.index') }}">
                         <i class="fa fa-money"></i> <span>Transaction</span>
                     </a>
                 </li>
@@ -59,14 +59,13 @@
                         <i class="fa fa-users"></i> <span>User</span>
                     </a>
                 </li>
-            @else
                 <li>
-                    <a href="{{ route('transaksi.index') }}">
+                    <a href="{{ route('transaction.index') }}">
                         <i class="fa fa-cart-arrow-down"></i> <span>Transaksi Aktif</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('transaksi.baru') }}">
+                    <a href="{{ route('transaction.baru') }}">
                         <i class="fa fa-cart-arrow-down"></i> <span>Transaksi Baru</span>
                     </a>
                 </li>

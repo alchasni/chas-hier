@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar Penjualan
+    Transaction
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Daftar Penjualan</li>
+    <li class="active">Transaction</li>
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
     <div class="col-lg-12">
         <div class="box">
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered table-penjualan">
+                <table class="table table-stiped table-bordered table-transaction">
                     <thead>
                         <th width="5%">No</th>
                         <th>Tanggal</th>
@@ -32,7 +32,7 @@
     </div>
 </div>
 
-@includeIf('penjualan.detail')
+@includeIf('transaction.detail')
 @endsection
 
 @push('scripts')
@@ -40,22 +40,22 @@
     let table, table1;
 
     $(function () {
-        table = $('.table-penjualan').DataTable({
+        table = $('.table-transaction').DataTable({
             processing: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('penjualan.data') }}',
+                url: '{{ route('transaction.data') }}',
             },
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'tanggal'},
-                {data: 'kode_member'},
-                {data: 'total_item'},
-                {data: 'total_harga'},
-                {data: 'diskon'},
-                {data: 'bayar'},
-                {data: 'kasir'},
-                {data: 'aksi', searchable: false, sortable: false},
+                {data: 'date'},
+                {data: 'member_code'},
+                {data: 'total_item_quantity'},
+                {data: 'total_price'},
+                {data: 'discount'},
+                {data: 'money_received'},
+                {data: 'user_name'},
+                {data: 'action', searchable: false, sortable: false},
             ]
         });
 
@@ -67,9 +67,9 @@
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'code'},
                 {data: 'name'},
-                {data: 'harga_jual'},
-                {data: 'jumlah'},
-                {data: 'subtotal'},
+                {data: 'sell_price'},
+                {data: 'quantity'},
+                {data: 'price'},
             ]
         })
     });

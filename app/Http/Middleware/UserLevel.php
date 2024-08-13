@@ -5,13 +5,13 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class CekLevel
+class UserLevel
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param Request $request
+     * @param Closure $next
      * @param mixed $level  [1. admin | 2. kasir]
      * @return mixed
      */
@@ -21,6 +21,6 @@ class CekLevel
             return $next($request);
         }
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->withErrors('You cannot access that.');
     }
 }

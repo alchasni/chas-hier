@@ -1,12 +1,12 @@
 @extends('layouts.master')
 
 @section('title')
-    Transaksi Penjualan
+    Transaction
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Transaksi Penjualan</li>
+    <li class="active">Transaction</li>
 @endsection
 
 @section('content')
@@ -21,11 +21,11 @@
             </div>
             <div class="box-footer">
 {{--                @if ($setting->tipe_nota == 1)--}}
-{{--                <button class="btn btn-warning btn-flat" onclick="notaKecil('{{ route('transaksi.nota_kecil') }}', 'Nota Kecil')">Cetak Ulang Nota</button>--}}
+{{--                <button class="btn btn-warning btn-flat" onclick="notaKecil('{{ route('transaction.nota_kecil') }}', 'Nota Kecil')">Cetak Ulang Nota</button>--}}
 {{--                @else--}}
-{{--                <button class="btn btn-warning btn-flat" onclick="notaBesar('{{ route('transaksi.nota_besar') }}', 'Nota PDF')">Cetak Ulang Nota</button>--}}
+{{--                <button class="btn btn-warning btn-flat" onclick="notaBesar('{{ route('transaction.nota_besar') }}', 'Nota PDF')">Cetak Ulang Nota</button>--}}
 {{--                @endif--}}
-                <a href="{{ route('transaksi.baru') }}" class="btn btn-primary btn-flat">Transaksi Baru</a>
+                <a href="{{ route('transaction.baru') }}" class="btn btn-primary btn-flat">Transaksi Baru</a>
             </div>
         </div>
     </div>

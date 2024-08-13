@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('level')->default(0);
             $table->text('two_factor_secret')->nullable();
             $table->text('two_factor_recovery_codes')->nullable();
+            $table->text('session_token')->nullable();
             $table->rememberToken();
             $table->text('profile_photo_path')->nullable();
 

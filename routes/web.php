@@ -5,12 +5,7 @@ use App\Http\Controllers\{DashboardController,
     LaporanController,
     ProductController,
     GuestController,
-    PengeluaranController,
-    PembelianController,
-    PembelianDetailController,
-    PenjualanController,
-    PenjualanDetailController,
-    SupplierController,
+    TransactionDetailController,
     TransactionController,
     UserController};
 use Illuminate\Support\Facades\Route;
@@ -38,8 +33,6 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['middleware' => 'level:1'], function () {
-        Route::get('/category/data', [CategoryController::class, 'data'])->name('category.data');
-        Route::resource('/category', CategoryController::class);
 
         Route::get('/product/data', [ProductController::class, 'data'])->name('product.data');
         Route::post('/product/barcode', [ProductController::class, 'printBarcode'])->name('product.print_barcode');
@@ -48,22 +41,22 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/guest/data', [GuestController::class, 'data'])->name('guest.data');
         Route::resource('/guest', GuestController::class);
 
-        Route::get('/penjualan/data', [PenjualanController::class, 'data'])->name('penjualan.data');
-        Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
-        Route::get('/penjualan/{id}', [PenjualanController::class, 'show'])->name('penjualan.show');
-        Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
+        Route::get('/transaction/data', [TransactionController::class, 'data'])->name('transaction.data');
+        Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction.index');
+        Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('transaction.show');
+        Route::delete('/transaction/{id}', [TransactionController::class, 'destroy'])->name('transaction.destroy');
     });
 
     Route::group(['middleware' => 'level:1,2'], function () {
-        Route::get('/transaksi/baru', [PenjualanController::class, 'create'])->name('transaksi.baru');
-        Route::post('/transaksi/simpan', [PenjualanController::class, 'store'])->name('transaksi.simpan');
-        Route::get('/transaksi/selesai', [PenjualanController::class, 'selesai'])->name('transaksi.selesai');
-        Route::get('/transaksi/nota-kecil', [PenjualanController::class, 'notaKecil'])->name('transaksi.nota_kecil');
-        Route::get('/transaksi/nota-besar', [PenjualanController::class, 'notaBesar'])->name('transaksi.nota_besar');
+        Route::get('/transaksi/baru', [TransactionController::class, 'create'])->name('transaction.baru');
+        Route::post('/transaksi/simpan', [TransactionController::class, 'store'])->name('transaction.simpan');
+        Route::get('/transaksi/selesai', [TransactionController::class, 'selesai'])->name('transaction.selesai');
+        Route::get('/transaksi/nota-kecil', [TransactionController::class, 'notaKecil'])->name('transaction.nota_kecil');
+        Route::get('/transaksi/nota-besar', [TransactionController::class, 'notaBesar'])->name('transaction.nota_besar');
 
-        Route::get('/transaksi/{id}/data', [PenjualanDetailController::class, 'data'])->name('transaksi.data');
-        Route::get('/transaksi/loadform/{diskon}/{total}/{diterima}', [PenjualanDetailController::class, 'loadForm'])->name('transaksi.load_form');
-        Route::resource('/transaksi', PenjualanDetailController::class)
+        Route::get('/transaction_detail/{id}/data', [TransactionDetailController::class, 'data'])->name('transaction_detail.data');
+        Route::get('/transaction_detail/loadform/{diskon}/{total}/{diterima}', [TransactionDetailController::class, 'loadForm'])->name('transaction_detail.load_form');
+        Route::resource('/transaction_detail', TransactionDetailController::class)
             ->except('create', 'show', 'edit');
     });
 
@@ -80,4 +73,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/profil', [UserController::class, 'profil'])->name('user.profil');
         Route::post('/profil', [UserController::class, 'updateProfil'])->name('user.update_profil');
     });
+});
+Route::group(['middleware' => 'csrf'], function () {
+    Route::get('/category/data', [CategoryController::class, 'data'])->name('category.data');
+    Route::resource('/category', CategoryController::class);
 });

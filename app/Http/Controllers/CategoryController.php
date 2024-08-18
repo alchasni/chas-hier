@@ -9,7 +9,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Category;
-use Illuminate\Http\Response;
 
 class CategoryController extends BaseController
 {
@@ -28,13 +27,14 @@ class CategoryController extends BaseController
      */
     public function data()
     {
-        $category = Category::orderBy('category_id', 'desc')->get();
+        try {
+            $categories = Category::orderBy('category_id', 'desc')->get();
 
-        return datatables()
-            ->of($category)
-            ->addIndexColumn()
-            ->addColumn('action', function ($category) {
-                return '
+            return datatables()
+                ->of($categories)
+                ->addIndexColumn()
+                ->addColumn('action', function ($category) {
+                    return '
                 <div class="btn-group">
                     <button type="button" onclick="updateOne(`'. route('category.update', $category->category_id) .'`)" class="btn btn-xs btn-info btn-flat">
                         <i class="fa fa-pencil"> edit</i>
@@ -44,19 +44,12 @@ class CategoryController extends BaseController
                     </button>
                 </div>
                 ';
-            })
-            ->rawColumns(['action'])
-            ->make(true);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return void
-     */
-    public function create()
-    {
-        //
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to load data'], 500);
+        }
     }
 
     /**
@@ -67,7 +60,11 @@ class CategoryController extends BaseController
      */
     public function store(Request $request): JsonResponse
     {
-        return $this->saveModel($request, new Category());
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        return $this->saveModel($validatedData, new Category());
     }
 
     /**
@@ -79,19 +76,7 @@ class CategoryController extends BaseController
     public function show(int $id): JsonResponse
     {
         $category = Category::find($id);
-
         return response()->json($category);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return void
-     */
-    public function edit(int $id)
-    {
-        //
     }
 
     /**
@@ -103,26 +88,31 @@ class CategoryController extends BaseController
      */
     public function update(Request $request, int $id): JsonResponse
     {
-        $category = Category::find($id);
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
 
+        $category = Category::find($id);
         if (!$category) {
-            return response()->json('Error: Category not found.', 404);
+            return response()->json(['error' => 'Category not found'], 404);
         }
 
-        return $this->saveModel($request, $category);
+        return $this->saveModel($validatedData, $category);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy(int $id): Response
+    public function destroy(int $id): JsonResponse
     {
         $category = Category::find($id);
-        $category->delete();
-
-        return response(null, 204);
+        if ($category) {
+            $category->delete();
+            return response()->json(['message' => 'Successfully deleted the data'], 200);
+        }
+        return response()->json(['error' => 'Category not found'], 404);
     }
 }

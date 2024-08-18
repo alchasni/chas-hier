@@ -28,10 +28,10 @@ class GuestController extends BaseController
     public function data(): JsonResponse
     {
         try {
-            $guest = Guest::orderBy('created_at')->get();
+            $guests = Guest::orderBy('created_at')->get();
 
             return datatables()
-                ->of($guest)
+                ->of($guests)
                 ->addIndexColumn()
                 ->addColumn('select_all', function ($guest) {
                     return '

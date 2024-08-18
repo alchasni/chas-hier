@@ -31,59 +31,59 @@ class ProductController extends BaseController
     public function data(): JsonResponse
     {
         try {
-        $products = Product::leftJoin('category', 'category.category_id', '=', 'product.category_id')
-            ->select('product.*', 'category.name as category_name')
-            ->orderBy('product.code', 'asc')
-            ->get();
+            $products = Product::leftJoin('category', 'category.category_id', '=', 'product.category_id')
+                ->select('product.*', 'category.name as category_name')
+                ->orderBy('product.code', 'asc')
+                ->get();
 
-        return datatables()
-            ->of($products)
-            ->addIndexColumn()
-            ->addColumn('select_all', function ($products) {
-                return '
-                    <input type="checkbox" name="product_id[]" value="'. $products->product_id .'">
+            return datatables()
+                ->of($products)
+                ->addIndexColumn()
+                ->addColumn('select_all', function ($product) {
+                    return '
+                    <input type="checkbox" name="product_id[]" value="'. $product->product_id .'">
                 ';
-            })
-            ->addColumn('code', function ($products) {
-                return '<span class="label label-success">'. $products->code .'</span>';
-            })
-            ->addColumn('buy_price', function ($products) {
-                return money_number_format($products->buy_price);
-            })
-            ->addColumn('sell_price', function ($products) {
-                return money_number_format($products->sell_price);
-            })
-            ->addColumn('stock', function ($products) {
-                return money_number_format($products->stock);
-            })
-            ->addColumn('action', function ($products) {
-                $actions = '
+                })
+                ->addColumn('code', function ($product) {
+                    return '<span class="label label-success">'. $product->code .'</span>';
+                })
+                ->addColumn('buy_price', function ($product) {
+                    return money_number_format($product->buy_price);
+                })
+                ->addColumn('sell_price', function ($product) {
+                    return money_number_format($product->sell_price);
+                })
+                ->addColumn('stock', function ($product) {
+                    return money_number_format($product->stock);
+                })
+                ->addColumn('action', function ($product) {
+                    $actions = '
                 <div class="btn-group">
                 ';
-                if (auth()->user()->level == 1) {
-                    $actions .= '
-                        <button type="button" onclick="updateOne(`' . route('product.update', $products->product_id) . '`)" class="btn btn-xs btn-info btn-flat">
+                    if (auth()->user()->level == 1) {
+                        $actions .= '
+                        <button type="button" onclick="updateOne(`' . route('product.update', $product->product_id) . '`)" class="btn btn-xs btn-info btn-flat">
                             <i class="fa fa-pencil"> edit</i>
                         </button>
                     ';
-                    $actions .= '
-                        <button type="button" onclick="deleteOne(`' . route('product.destroy', $products->product_id) . '`, `' . $products->name . '`)" class="btn btn-xs btn-danger btn-flat">
+                        $actions .= '
+                        <button type="button" onclick="deleteOne(`' . route('product.destroy', $product->product_id) . '`, `' . $product->name . '`)" class="btn btn-xs btn-danger btn-flat">
                             <i class="fa fa-trash"> delete</i>
                         </button>
                     ';
-                }
-                if (auth()->user()->level != 2) {
-                    $actions .= '
-                        <button type="button" onclick="updateStock(`' . route('product.update', $products->product_id) . '`)" class="btn btn-xs btn-info btn-flat">
+                    }
+                    if (auth()->user()->level != 2) {
+                        $actions .= '
+                        <button type="button" onclick="updateStock(`' . route('product.update', $product->product_id) . '`)" class="btn btn-xs btn-info btn-flat">
                             <i class="fa fa-cubes"> update stock</i>
                         </button>
                     ';
-                }
-                $actions .= '</div>';
-                return $actions;
-            })
-            ->rawColumns(['action', 'code', 'select_all'])
-            ->make(true);
+                    }
+                    $actions .= '</div>';
+                    return $actions;
+                })
+                ->rawColumns(['action', 'code', 'select_all'])
+                ->make(true);
         } catch (Exception $e) {
             return response()->json(['error' => 'Failed to load data'], 500);
         }

@@ -19,7 +19,7 @@
                 <div class="box-body table-responsive">
                     <table class="table table-stiped table-bordered">
                         <thead>
-                        <th>Product Category</th>
+                        <th>Name</th>
                         <th><i class="fa fa-cog"></i></th>
                         </thead>
                     </table>
@@ -30,7 +30,6 @@
 
     @includeIf('category.form')
 @endsection
-
 @push('scripts')
     <script>
         let table;
@@ -48,64 +47,27 @@
                 ]
             });
 
-            $('#modal-form').validator().on('submit', function (e) {
-                if (!e.preventDefault()) {
-                    $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
-                        .done((response) => {
-                            $('#modal-form').modal('hide');
-                            table.ajax.reload();
-                        })
-                        .fail((errors) => {
-                            alert(errors.responseText);
-                            return;
-                        });
-                }
-            });
+            handleFormSubmit();
         });
 
         function createOne(url) {
-            $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Create Category');
-
-            $('#modal-form form')[0].reset();
-            $('#modal-form form').attr('action', url);
-            $('#modal-form [name=_method]').val('post');
-            $('#modal-form [name=category_name]').focus();
+            openModal('#modal-form', 'Create Category', '#modal-form form', url);
         }
 
         function updateOne(url) {
-            $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Edit Category');
-
-            $('#modal-form form')[0].reset();
-            $('#modal-form form').attr('action', url);
-            $('#modal-form [name=_method]').val('put');
-            $('#modal-form [name=category_name]').focus();
+            openModal('#modal-form', 'Edit Category', '#modal-form form', url, 'put');
 
             $.get(url)
                 .done((response) => {
                     $('#modal-form [name=name]').val(response.name);
                 })
                 .fail((errors) => {
-                    alert('Failed to show data');
-                    return;
+                    showToast('error', errors?.responseText || 'Failed to load data');
                 });
         }
 
         function deleteOne(url, name) {
-            if (confirm(`Are you sure you want to delete "${name}"?`)) {
-                $.post(url, {
-                    '_token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'delete'
-                })
-                    .done((response) => {
-                        table.ajax.reload();
-                    })
-                    .fail((errors) => {
-                        alert('Failed to delete data');
-                        return;
-                    });
-            }
+            showConfirmToast(`Are you sure you want to delete "${name}"?`, url, 'Successfully deleted the data', 'Failed to delete data')
         }
     </script>
 @endpush

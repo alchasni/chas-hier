@@ -20,11 +20,8 @@
                 </div>
             </div>
             <div class="box-footer">
-{{--                @if ($setting->tipe_nota == 1)--}}
-{{--                <button class="btn btn-warning btn-flat" onclick="notaKecil('{{ route('transaction.nota_kecil') }}', 'Nota Kecil')">Cetak Ulang Nota</button>--}}
-{{--                @else--}}
-{{--                <button class="btn btn-warning btn-flat" onclick="notaBesar('{{ route('transaction.nota_besar') }}', 'Nota PDF')">Cetak Ulang Nota</button>--}}
-{{--                @endif--}}
+                <button class="btn btn-warning btn-flat" onclick="notaKecil('{{ route('transaction.nota_kecil') }}', 'Nota Kecil')">Cetak Ulang Nota</button>
+                <button class="btn btn-warning btn-flat" onclick="notaBesar('{{ route('transaction.nota_besar') }}', 'Nota PDF')">Cetak Ulang Nota</button>
                 <a href="{{ route('transaction.new') }}" class="btn btn-primary btn-flat">Transaksi Baru</a>
             </div>
         </div>

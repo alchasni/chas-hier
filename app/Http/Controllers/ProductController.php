@@ -102,7 +102,6 @@ class ProductController extends BaseController
             'category_id' => 'required|exists:category,category_id',
             'buy_price' => 'required|numeric|min:0',
             'sell_price' => 'required|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0|max:100',
             'stock' => 'required|integer|min:0',
         ]);
 
@@ -139,7 +138,6 @@ class ProductController extends BaseController
             'category_id' => 'required|exists:category,category_id',
             'buy_price' => 'required|numeric|min:0',
             'sell_price' => 'required|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0|max:100',
             'stock' => 'required|integer|min:0',
         ];
         $validatedData = $request->validate($rules);

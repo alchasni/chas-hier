@@ -33,7 +33,6 @@
                             <th>Category</th>
                             <th>Buy price</th>
                             <th>Sell price</th>
-                            <th>Discount</th>
                             <th>Stock</th>
                             <th><i class="fa fa-cog"></i></th>
                             </thead>
@@ -64,7 +63,6 @@
                     {data: 'category_name'},
                     {data: 'buy_price', searchable: false},
                     {data: 'sell_price', searchable: false},
-                    {data: 'discount', searchable: false},
                     {data: 'stock', searchable: false},
                     {data: 'action', searchable: false, sortable: false},
                 ]
@@ -87,7 +85,6 @@
                     $('#modal-form [name=category_id]').val(response.category_id);
                     $('#modal-form [name=buy_price]').val(response.buy_price);
                     $('#modal-form [name=sell_price]').val(response.sell_price);
-                    $('#modal-form [name=discount]').val(response.discount);
                     $('#modal-form [name=stock]').val(response.stock);
                 })
                 .fail((errors) => {
@@ -108,12 +105,10 @@
                     $('#modal-form [name=category_id]').val(response.category_id);
                     $('#modal-form [name=buy_price]').val(response.buy_price);
                     $('#modal-form [name=sell_price]').val(response.sell_price);
-                    $('#modal-form [name=discount]').val(response.discount);
 
                     $('#modal-form [name=category_id]').closest('.form-group').hide();
                     $('#modal-form [name=buy_price]').closest('.form-group').hide();
                     $('#modal-form [name=sell_price]').closest('.form-group').hide();
-                    $('#modal-form [name=discount]').closest('.form-group').hide();
 
                     $('#modal-form [name=stock]').val(response.stock);
                 })

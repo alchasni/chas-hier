@@ -66,7 +66,6 @@
                         <th>Name</th>
                         <th>Price</th>
                         <th width="5%">Quantity</th>
-                        <th>Discount</th>
                         <th>Subtotal</th>
                         <th width="5%"><i class="fa fa-cog"></i></th>
                         </thead>
@@ -101,14 +100,6 @@
                                             <button onclick="showGuestModal()" class="btn btn-info btn-flat" type="button"><i class="fa fa-arrow-right"></i></button>
                                         </span>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="discount" class="col-lg-2 control-label">Diskon</label>
-                                    <div class="col-lg-8">
-                                        <input type="number" name="discount" id="discount" class="form-control"
-                                               value="{{ ! empty($guestSelected->guest_id) ? $discount : 0 }}"
-                                               readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -164,7 +155,6 @@
                     {data: 'name'},
                     {data: 'sell_price'},
                     {data: 'quantity'},
-                    {data: 'discount'},
                     {data: 'price'},
                     {data: 'action', searchable: false, sortable: false},
                 ],
@@ -173,7 +163,7 @@
                 paginate: false
             })
                 .on('draw.dt', function () {
-                    loadForm($('#discount').val());
+                    loadForm();
                     setTimeout(() => {
                         $('#money_received').trigger('input');
                     }, 300);
@@ -207,7 +197,7 @@
                 })
                     .done(response => {
                         $(this).on('mouseout', function () {
-                            table.ajax.reload(() => loadForm($('#discount').val()));
+                            table.ajax.reload(() => loadForm());
                         });
                     })
                     .fail((errors) => {
@@ -215,20 +205,12 @@
                     });
             });
 
-            $(document).on('input', '#discount', function () {
-                if ($(this).val() == "") {
-                    $(this).val(0).select();
-                }
-
-                loadForm($(this).val());
-            });
-
             $('#money_received').on('input', function () {
                 if ($(this).val() == "") {
                     $(this).val(0).select();
                 }
 
-                loadForm($('#discount').val(), $(this).val());
+                loadForm($(this).val());
             }).focus(function () {
                 $(this).select();
             });
@@ -272,7 +254,7 @@
             $.post('{{ route('transaction_detail.store') }}', $('.form-product').serialize())
                 .done(response => {
                     $('#code').focus();
-                    table.ajax.reload(() => loadForm($('#discount').val()));
+                    table.ajax.reload(() => loadForm());
                 })
                 .fail(errors => {
                     alert('Tidak dapat menyimpan data');
@@ -291,8 +273,7 @@
         function chooseGuest(id, name) {
             $('#guest_id').val(id);
             $('#name').val(name);
-            $('#discount').val('{{ $discount }}');
-            loadForm($('#discount').val());
+            loadForm();
             $('#money_received').val(0).focus().select();
             hideGuestModal();
         }
@@ -304,7 +285,7 @@
                     '_method': 'delete'
                 })
                     .done((response) => {
-                        table.ajax.reload(() => loadForm($('#discount').val()));
+                        table.ajax.reload(() => loadForm());
                     })
                     .fail((errors) => {
                         alert('Tidak dapat menghapus data');
@@ -313,11 +294,11 @@
             }
         }
 
-        function loadForm(discount = 0, money_received = 0) {
+        function loadForm(money_received = 0) {
             $('#total_price').val($('.total_price').text());
             $('#total_item_quantity').val($('.total_item_quantity').text());
 
-            $.get(`{{ url('/transaction_detail/loadform') }}/${discount}/${$('.total_price').text()}/${money_received}`)
+            $.get(`{{ url('/transaction_detail/loadform') }}/${$('.total_price').text()}/${money_received}`)
                 .done(response => {
                     $('#totalrp').val('Rp. '+ response.totalrp);
                     $('#final_pricerp').val('Rp. '+ response.final_pricerp);

@@ -58,7 +58,7 @@ Route::group(['middleware' => 'csrf'], function () {
             Route::get('/transaksi/nota-besar', [TransactionController::class, 'notaBesar'])->name('transaction.nota_besar');
 
             Route::get('/transaction_detail/{id}/data', [TransactionDetailController::class, 'data'])->name('transaction_detail.data');
-            Route::get('/transaction_detail/loadform/{diskon}/{total}/{diterima}', [TransactionDetailController::class, 'loadForm'])->name('transaction_detail.load_form');
+            Route::get('/transaction_detail/loadform/{total}/{diterima}', [TransactionDetailController::class, 'loadForm'])->name('transaction_detail.load_form');
             Route::resource('/transaction_detail', TransactionDetailController::class)
                 ->except('create', 'show', 'edit');
         });

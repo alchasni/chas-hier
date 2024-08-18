@@ -70,7 +70,6 @@
             <td>{{ $item->product->code }}</td>
             <td class="text-right">{{ money_number_format($item->sell_price) }}</td>
             <td class="text-right">{{ money_number_format($item->quantity) }}</td>
-            <td class="text-right">{{ $item->discount }}</td>
             <td class="text-right">{{ money_number_format($item->price) }}</td>
         </tr>
     @endforeach

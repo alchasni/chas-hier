@@ -21,7 +21,6 @@
                         <th>Member Code</th>
                         <th>Total Item</th>
                         <th>Total Harga</th>
-                        <th>Diskon</th>
                         <th>Total Bayar</th>
                         <th>Kasir</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
@@ -52,7 +51,6 @@
                 {data: 'member_code'},
                 {data: 'total_item_quantity'},
                 {data: 'total_price'},
-                {data: 'discount'},
                 {data: 'money_received'},
                 {data: 'user_name'},
                 {data: 'action', searchable: false, sortable: false},

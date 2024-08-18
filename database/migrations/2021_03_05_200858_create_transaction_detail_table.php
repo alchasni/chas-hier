@@ -19,7 +19,6 @@ class CreateTransactionDetailTable extends Migration
             $table->integer('product_id')->unsigned();
             $table->integer('sell_price')->unsigned();
             $table->integer('quantity')->unsigned();
-            $table->tinyInteger('discount')->default(0);
             $table->integer('price')->unsigned();
             $table->timestamps();
 

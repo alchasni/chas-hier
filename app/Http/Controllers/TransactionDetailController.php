@@ -14,13 +14,12 @@ class TransactionDetailController extends Controller
     {
         $products = Product::orderBy('name')->get();
         $guests = Guest::orderBy('name')->get();
-        $discount = 0;
 
         if ($transaction_id = session('transaction_id')) {
             $transaction = Transaction::find($transaction_id);
             $guestSelected = $transaction->guest ?? new Guest();
 
-            return view('transaction_detail.index', compact('products', 'guests', 'discount', 'transaction_id', 'transaction', 'guestSelected'));
+            return view('transaction_detail.index', compact('products', 'guests', 'transaction_id', 'transaction', 'guestSelected'));
         } else {
             if (auth()->user()->level == 1) {
                 return redirect()->route('transaction.new');
@@ -46,7 +45,6 @@ class TransactionDetailController extends Controller
             $row['name'] = $item->product['name'];
             $row['sell_price']  = 'Rp. '. money_number_format($item->sell_price);
             $row['quantity']      = '<input type="number" class="form-control input-sm quantity" data-id="'. $item->transaction_detail_id .'" value="'. $item->quantity .'">';
-            $row['discount']      = $item->discount . '%';
             $row['price']    = 'Rp. '. money_number_format($item->price);
             $row['action']        = '<div class="btn-group">
                                     <button onclick="deleteData(`'. route('transaction_detail.destroy', $item) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
@@ -63,7 +61,6 @@ class TransactionDetailController extends Controller
             'name' => '',
             'sell_price'  => '',
             'quantity'      => '',
-            'discount'      => '',
             'price'    => '',
             'action'        => '',
         ];
@@ -87,7 +84,6 @@ class TransactionDetailController extends Controller
         $detail->product_id = $product->product_id;
         $detail->sell_price = $product->sell_price;
         $detail->quantity = 1;
-        $detail->discount = 0;
         $detail->price = $product->sell_price;
         $detail->save();
 
@@ -110,15 +106,14 @@ class TransactionDetailController extends Controller
         return response(null, 204);
     }
 
-    public function loadForm($discount = 0, $total = 0, $diterima = 0)
+    public function loadForm($total = 0, $diterima = 0)
     {
-        $final_price   = $total - ($discount / 100 * $total);
-        $kembali = ($diterima != 0) ? $diterima - $final_price : 0;
+        $kembali = ($diterima != 0) ? $diterima - $total : 0;
         $data    = [
             'totalrp' => money_number_format($total),
-            'final_price' => $final_price,
-            'final_pricerp' => money_number_format($final_price),
-            'terbilang' => ucwords(money_written_format($final_price). ' Rupiah'),
+            'final_price' => $total,
+            'final_pricerp' => money_number_format($total),
+            'terbilang' => ucwords(money_written_format($total). ' Rupiah'),
             'kembalirp' => money_number_format($kembali),
             'kembali_terbilang' => ucwords(money_written_format($kembali). ' Rupiah'),
         ];

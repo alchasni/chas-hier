@@ -19,7 +19,6 @@ class CreateTransactionTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('total_item_quantity')->unsigned();
             $table->integer('total_price')->unsigned();
-            $table->tinyInteger('discount')->default(0);
             $table->integer('final_price')->default(0);
             $table->integer('money_received')->default(0);
             $table->boolean('is_temp')->default(false);

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Guest;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Models\Product;
@@ -32,13 +31,13 @@ class TransactionController extends Controller
      */
     public function data()
     {
-        $transaction = Transaction::with('guest')
+        $transactions = Transaction::with('guest')
             ->where('is_temp', false)
             ->orderBy('transaction_id', 'desc')
             ->get();
 
         return datatables()
-            ->of($transaction)
+            ->of($transactions)
             ->addIndexColumn()
             ->addColumn('total_item_quantity', function ($transaction) {
                 return money_number_format($transaction->total_item_quantity);
@@ -55,9 +54,6 @@ class TransactionController extends Controller
             ->addColumn('member_code', function ($transaction) {
                 $guest = $transaction->guest->member_code ?? '';
                 return '<span class="label label-success">'. $guest .'</spa>';
-            })
-            ->editColumn('discount', function ($transaction) {
-                return $transaction->discount . '%';
             })
             ->editColumn('user_name', function ($transaction) {
                 return $transaction->user->name ?? '';
@@ -90,7 +86,6 @@ class TransactionController extends Controller
             $transaction->guest_id = null;
             $transaction->total_item_quantity = 0;
             $transaction->total_price = 0;
-            $transaction->discount = 0;
             $transaction->final_price = 0;
             $transaction->money_received = 0;
             $transaction->user_id = auth()->id();
@@ -111,23 +106,20 @@ class TransactionController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $transaction = Transaction::findOrFail($request->transaction_id);
-        $transaction->guest_id = $request->guest_id;
-        $transaction->total_item_quantity = $request->total_item_quantity;
-        $transaction->total_price = $request->total_price;
-        $transaction->discount = $request->discount;
-        $transaction->final_price = $request->final_price;
-        $transaction->money_received = $request->money_received;
-        $transaction->is_temp = false;
-        $transaction->update();
+        $transaction->update([
+            'guest_id' => $request->guest_id,
+            'total_item_quantity' => $request->total_item_quantity,
+            'total_price' => $request->total_price,
+            'final_price' => $request->final_price,
+            'money_received' => $request->money_received,
+            'is_temp' => false,
+        ]);
 
-        $detail = TransactionDetail::where('transaction_id', $transaction->transaction_id)->get();
-        foreach ($detail as $item) {
-            $item->discount = $request->discount;
-            $item->update();
-
+        foreach (TransactionDetail::where('transaction_id', $transaction->transaction_id)->get() as $item) {
             $product = Product::find($item->product_id);
-            $product->stock -= $item->quantity;
-            $product->update();
+            if ($product) {
+                $product->decrement('stock', $item->quantity);
+            }
         }
 
         return redirect()->route('transaction.selesai');
@@ -162,20 +154,18 @@ class TransactionController extends Controller
     public function destroy($id)
     {
         $transaction = Transaction::find($id);
-        $detail    = TransactionDetail::where('transaction_id', $transaction->transaction_id)->get();
-        foreach ($detail as $item) {
-            $product = Product::find($item->product_id);
-            if ($product) {
-                $product->stock += $item->quantity;
-                $product->update();
+        if ($transaction) {
+            foreach (TransactionDetail::where('transaction_id', $transaction->transaction_id)->get() as $item) {
+                $product = Product::find($item->product_id);
+                if ($product) {
+                    $product->increment('stock', $item->quantity);
+                }
+                $item->delete();
             }
-
-            $item->delete();
+            $transaction->delete();
+            return response(null, 204);
         }
-
-        $transaction->delete();
-
-        return response(null, 204);
+        return response()->json(['error' => 'Transaction not found'], 404);
     }
 
     public function selesai()

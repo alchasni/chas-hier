@@ -146,7 +146,7 @@ class ProductController extends BaseController
 
         $product = Product::find($id);
         if (!$product) {
-            return response()->json('Error: Product not found.', 404);
+            return response()->json(['error' => 'Product not found'], 404);
         }
 
         return $this->saveModel($validatedData, $product);
@@ -163,7 +163,7 @@ class ProductController extends BaseController
         $product = Product::find($id);
         if ($product) {
             $product->delete();
-            return response()->json(['message' => 'Operation successful'], 200);
+            return response()->json(['message' => 'Successfully deleted the data'], 200);
         }
         return response()->json(['error' => 'Product not found'], 404);
     }

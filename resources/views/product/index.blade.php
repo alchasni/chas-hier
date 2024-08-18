@@ -24,7 +24,7 @@
                 <div class="box-body table-responsive">
                     <form action="" method="post" class="form-product">
                         @csrf
-                        <table class="table table-stiped table-bordered">
+                        <table class="table table-striped table-bordered">
                             <thead>
                             <th width="5%">
                                 <input type="checkbox" name="select_all" id="select_all">
@@ -50,17 +50,13 @@
 @push('scripts')
     <script>
         let table;
+
         $(function () {
             table = $('.table').DataTable({
                 processing: true,
-                serverSide: true, // Enable server-side processing
                 autoWidth: false,
                 ajax: {
-                    url: '{{ route('product.data') }}', // Ensure this route matches your controller method
-                    data: function (d) {
-                        // Add any additional parameters if needed
-                        // d.filter = $('#filter-input').val(); // Example for adding filters
-                    }
+                    url: '{{ route('product.data') }}',
                 },
                 columns: [
                     {data: 'select_all', searchable: false, sortable: false},
@@ -74,42 +70,16 @@
                 ]
             });
 
-            $('#modal-form').validator().on('submit', function (e) {
-                if (!e.preventDefault()) {
-                    $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
-                        .done((response) => {
-                            $('#modal-form').modal('hide');
-                            table.ajax.reload(); // Reload DataTable data
-                        })
-                        .fail((errors) => {
-                            alert(errors.responseText);
-                        });
-                }
-            });
-
-            $('[name=select_all]').on('click', function () {
-                $(':checkbox').prop('checked', this.checked);
-            });
+            handleFormSubmit();
+            selectAllCheckboxes('[name=select_all]', ':checkbox');
         });
 
         function createOne(url) {
-            $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Create Product');
-
-            $('#modal-form form')[0].reset();
-            $('#modal-form form').attr('action', url);
-            $('#modal-form [name=_method]').val('post');
-            $('#modal-form [name=name]').focus();
+            openModal('#modal-form', 'Create Product', '#modal-form form', url);
         }
 
         function updateOne(url) {
-            $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Edit Product');
-
-            $('#modal-form form')[0].reset();
-            $('#modal-form form').attr('action', url);
-            $('#modal-form [name=_method]').val('put');
-            $('#modal-form [name=name]').focus();
+            openModal('#modal-form', 'Edit Product', '#modal-form form', url, 'put');
 
             $.get(url)
                 .done((response) => {
@@ -121,34 +91,16 @@
                     $('#modal-form [name=stock]').val(response.stock);
                 })
                 .fail((errors) => {
-                    alert('Failed to show data');
-                    return;
+                    showToast('error', errors?.responseText || 'Failed to load data');
                 });
         }
 
         function deleteOne(url, name) {
-            if (confirm(`Are you sure you want to delete "${name}"?`)) {
-                $.post(url, {
-                    '_token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'delete'
-                })
-                    .done((response) => {
-                        table.ajax.reload();
-                    })
-                    .fail((errors) => {
-                        alert('Failed to delete data');
-                        return;
-                    });
-            }
+            showConfirmToast(`Are you sure you want to delete "${name}"?`, url, 'Successfully deleted the data', 'Failed to delete data')
         }
 
         function updateStock(url) {
-            $('#modal-form form')[0].reset();
-            $('#modal-form form').attr('action', url);
-            $('#modal-form [name=_method]').val('put');
-
-            $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Edit Product');
+            openModal('#modal-form', 'Update Stock', '#modal-form form', url, 'put');
 
             $.get(url)
                 .done((response) => {
@@ -166,15 +118,15 @@
                     $('#modal-form [name=stock]').val(response.stock);
                 })
                 .fail((errors) => {
-                    alert('Failed to show data');
+                    showToast('error', errors?.responseText || 'Failed to load data');
                 });
         }
 
         function printBarcode(url) {
             if ($('input:checked').length < 1) {
-                alert('Select the product to print');
+                showToast('info', 'Select the product to print');
             } else if ($('input:checked').length < 3) {
-                alert('Select at least 3 to print');
+                showToast('info', 'Select at least 3 to print');
             } else {
                 $('.form-product')
                     .attr('target', '_blank')

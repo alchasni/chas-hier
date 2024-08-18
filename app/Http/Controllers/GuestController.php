@@ -106,7 +106,7 @@ class GuestController extends BaseController
 
         $guest = Guest::find($id);
         if (!$guest) {
-            return response()->json('Error: Guest not found.', 404);
+            return response()->json(['error' => 'Guest not found'], 404);
         }
 
         return $this->saveModel($validatedData, $guest);
@@ -123,7 +123,7 @@ class GuestController extends BaseController
         $guest = Guest::find($id);
         if ($guest) {
             $guest->delete();
-            return response()->json(['message' => 'Operation successful'], 200);
+            return response()->json(['message' => 'Successfully deleted the data'], 200);
         }
         return response()->json(['error' => 'Guest not found'], 404);
     }

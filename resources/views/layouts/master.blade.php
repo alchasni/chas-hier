@@ -93,6 +93,7 @@
     <!-- Validator -->
     <script src="{{ asset('js/validator.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/custom.js') }}" defer></script>
 
     <script>
         function preview(selector, temporaryFile, width = 200)  {

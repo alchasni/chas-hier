@@ -12,12 +12,12 @@ abstract class BaseController extends Controller
             $model->fill($data);
             $model->save();
 
-            return response()->json('Data saved successfully', 200);
+            return response()->json(['message' => 'Data saved successfully'], 200);
         } catch (QueryException $e) {
             if ($e->getCode() == 23000) {
-                return response()->json('Error: Duplicate entry.', 409);
+                return response()->json(['error' => 'Duplicate entry'], 500);
             }
-            return response()->json('Error: Could not save the data.', 500);
+            return response()->json(['error' => 'Could not save the data'], 500);
         }
     }
 }

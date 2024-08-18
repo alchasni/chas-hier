@@ -277,3 +277,47 @@ tbody tr:hover {
     color: #3b8bba;
     z-index: 1000;
 }
+
+/*TOAST*/
+.custom-toast-container {
+    z-index: 9999;
+    width: 400px;
+}
+
+.custom-toast-popup {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.icon-info .swal2-timer-progress-bar {
+    background-color: #17a2b8;
+}
+.icon-success .swal2-timer-progress-bar {
+    background-color: #28a745;
+}
+.icon-error .swal2-timer-progress-bar {
+    background-color: #dc3545;
+}
+.icon-warning .swal2-timer-progress-bar {
+    background-color: #ffc107;
+}
+.swal2-confirm-button {
+    font-size: 14px;
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: #fff;
+}
+
+.swal2-cancel-button {
+    font-size: 14px;
+    padding: 10px 20px;
+    background-color: #9e9e9e;
+    color: #fff;
+}
+
+.swal2-title-custom {
+    font-size: 18px;
+}

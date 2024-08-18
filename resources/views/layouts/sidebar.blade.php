@@ -65,8 +65,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('transaction.baru') }}">
-                        <i class="fa fa-cart-arrow-down"></i> <span>Transaksi Baru</span>
+                    <a href="{{ route('transaction.new') }}">
+                        <i class="fa fa-cart-arrow-down"></i> <span>New Transaction</span>
                     </a>
                 </li>
             @endif

@@ -25,7 +25,7 @@
 {{--                @else--}}
 {{--                <button class="btn btn-warning btn-flat" onclick="notaBesar('{{ route('transaction.nota_besar') }}', 'Nota PDF')">Cetak Ulang Nota</button>--}}
 {{--                @endif--}}
-                <a href="{{ route('transaction.baru') }}" class="btn btn-primary btn-flat">Transaksi Baru</a>
+                <a href="{{ route('transaction.new') }}" class="btn btn-primary btn-flat">Transaksi Baru</a>
             </div>
         </div>
     </div>

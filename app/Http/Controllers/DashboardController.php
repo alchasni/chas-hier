@@ -11,16 +11,29 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $date = date('Y-m-d');
-        $transaction = Transaction::where('created_at', 'LIKE', "%$date%")->count();
-        $category = Category::count();
-        $product = Product::count();
-        $guest = Guest::count();
+        $data = $this->getDashboardData();
+        return $this->getDashboardView($data);
+    }
 
+    protected function getDashboardData()
+    {
+        $date = now()->format('Y-m-d');
+        return [
+            'transaction' => Transaction::where('created_at', 'LIKE', "%$date%")->count(),
+            'category' => Category::count(),
+            'product' => Product::count(),
+            'guest' => Guest::count(),
+        ];
+    }
+
+    protected function getDashboardView($data)
+    {
         if (auth()->user()->level == 1) {
-            return view('admin.dashboard', compact('category', 'product', 'guest', 'transaction'));
+            return view('dashboard.1', $data);
+        } elseif (auth()->user()->level == 2) {
+            return view('dashboard.3');
         } else {
-            return view('kasir.dashboard');
+            abort(403, 'Unauthorized action.');
         }
     }
 }

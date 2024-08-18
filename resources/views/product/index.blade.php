@@ -50,13 +50,17 @@
 @push('scripts')
     <script>
         let table;
-
         $(function () {
             table = $('.table').DataTable({
                 processing: true,
+                serverSide: true, // Enable server-side processing
                 autoWidth: false,
                 ajax: {
-                    url: '{{ route('product.data') }}',
+                    url: '{{ route('product.data') }}', // Ensure this route matches your controller method
+                    data: function (d) {
+                        // Add any additional parameters if needed
+                        // d.filter = $('#filter-input').val(); // Example for adding filters
+                    }
                 },
                 columns: [
                     {data: 'select_all', searchable: false, sortable: false},
@@ -75,11 +79,10 @@
                     $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
                         .done((response) => {
                             $('#modal-form').modal('hide');
-                            table.ajax.reload();
+                            table.ajax.reload(); // Reload DataTable data
                         })
                         .fail((errors) => {
                             alert(errors.responseText);
-                            return;
                         });
                 }
             });
@@ -139,7 +142,7 @@
             }
         }
 
-        function updateStock(url, name) {
+        function updateStock(url) {
             $('#modal-form form')[0].reset();
             $('#modal-form form').attr('action', url);
             $('#modal-form [name=_method]').val('put');
@@ -149,7 +152,7 @@
 
             $.get(url)
                 .done((response) => {
-                    $('#modal-form [name=name]').val(response.name).prop('disabled', true);
+                    $('#modal-form [name=name]').val(response.name).prop('readonly', true);
                     $('#modal-form [name=category_id]').val(response.category_id);
                     $('#modal-form [name=buy_price]').val(response.buy_price);
                     $('#modal-form [name=sell_price]').val(response.sell_price);

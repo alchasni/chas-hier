@@ -107,22 +107,22 @@
             })
             .fail((errors) => {
                 alert('Failed to show data');
-                return;
             });
     }
 
     function deleteOne(url, name) {
         if (confirm(`Are you sure you want to delete "${name}"?`)) {
             $.post(url, {
-                    '_token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'delete'
-                })
-                .done((response) => {
+                '_token': $('[name=csrf-token]').attr('content'),
+                '_method': 'delete'
+            })
+                .done(() => {
                     table.ajax.reload();
+                    alert('Successfully deleted the guest');
                 })
                 .fail((errors) => {
-                    alert('Failed to delete data');
-                    return;
+                    console.error(errors);
+                    alert('Failed to delete data. Please try again.');
                 });
         }
     }

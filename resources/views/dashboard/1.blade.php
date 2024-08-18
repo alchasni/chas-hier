@@ -32,6 +32,9 @@
                             </div>
                         </div>
                     </div>
+                    <div id="loading-spinner" class="loading-spinner" style="display: none;">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -41,40 +44,40 @@
             <div class="small-box bg-aqua">
                 <div class="inner">
                     <h3>{{ $category }}</h3>
-                    <p>Categories</p>
+                    <p><b>Categories</b></p>
                 </div>
                 <div class="icon"><i class="fa fa-tags"></i></div>
-                <a href="{{ route('category.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{ route('category.index') }}" class="small-box-footer">View Details <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <div class="col-lg-3 col-xs-6">
             <div class="small-box bg-red">
                 <div class="inner">
                     <h3>{{ $product }}</h3>
-                    <p>Products</p>
+                    <p><b>Products</b></p>
                 </div>
                 <div class="icon"><i class="fa fa-dropbox"></i></div>
-                <a href="{{ route('product.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{ route('product.index') }}" class="small-box-footer">View Details <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <div class="col-lg-3 col-xs-6">
             <div class="small-box bg-yellow">
                 <div class="inner">
                     <h3>{{ $guest }}</h3>
-                    <p>Guest</p>
+                    <p><b>Guest</b></p>
                 </div>
                 <div class="icon"><i class="fa fa-id-card"></i></div>
-                <a href="{{ route('guest.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{ route('guest.index') }}" class="small-box-footer">View Details <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <div class="col-lg-3 col-xs-6">
             <div class="small-box bg-green">
                 <div class="inner">
                     <h3>{{ $transaction }}</h3>
-                    <p>Today's Transaction</p>
+                    <p><b>Today's Transaction</b></p>
                 </div>
                 <div class="icon"><i class="fa fa-money"></i></div>
-                <a href="{{ route('transaction.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="{{ route('transaction.index') }}" class="small-box-footer">View Details <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>
@@ -87,16 +90,10 @@
 @push('scripts')
     <script src="{{ asset('AdminLTE-2/bower_components/chart.js/Chart.js') }}"></script>
     <script>
-
-        Swal.fire({
-            title: "Good job!",
-            text: "You clicked the button!",
-            icon: "success"
-        });
         $(function () {
-            var salesChartCanvas = $('#salesChart').get(0).getContext('2d');
-            var salesChart = new Chart(salesChartCanvas);
-            let today = new Date().toISOString().split('T')[0]; // Get today's date in 'Y-m-d' format
+            let salesChart = null;
+            let salesChartCanvas = $('#salesChart').get(0).getContext('2d');
+            let today = new Date().toISOString().split('T')[0];
 
             var currentDate = new Date();
 
@@ -124,6 +121,11 @@
                         month: month
                     },
                     success: function(response) {
+                        if (salesChart) {
+                            salesChartCanvas.clearRect(0, 0, salesChartCanvas.canvas.width, salesChartCanvas.canvas.height);
+                            salesChart.clear();
+                            salesChart.destroy();
+                        }
                         var salesChartData = {
                             labels: response.dates,
                             datasets: [
@@ -144,9 +146,15 @@
                             pointDot: false,
                             responsive: true
                         };
-
                         $('#dateRange').text(`Sales ${response.startDate} - ${response.endDate}`);
-                        salesChart.Line(salesChartData, salesChartOptions);
+                        salesChart = new Chart(salesChartCanvas).Line(salesChartData, salesChartOptions);
+                    },
+                    complete: function() {
+                        $('#loading-spinner').hide();
+                    },
+                    error: function() {
+                        alert('Failed to load data');
+                        $('#loading-spinner').hide();
                     }
                 });
             }
@@ -159,7 +167,6 @@
                 updateChart(1);
             });
 
-            // Initialize chart with the current month
             updateChart(0);
         });
     </script>

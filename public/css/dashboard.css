@@ -266,3 +266,14 @@ tbody tr:hover {
 .btn-primary.btn-xs.btn-flat:hover {
     background-color: #555 !important;
 }
+
+/* Loading */
+.loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3em;
+    color: #3b8bba;
+    z-index: 1000;
+}

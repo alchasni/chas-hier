@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pembelian;
-use App\Models\Pengeluaran;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-use PDF;
 
 class LaporanController extends Controller
 {

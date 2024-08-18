@@ -23,7 +23,7 @@ class TransactionDetailController extends Controller
             return view('transaction_detail.index', compact('products', 'guests', 'discount', 'transaction_id', 'transaction', 'guestSelected'));
         } else {
             if (auth()->user()->level == 1) {
-                return redirect()->route('transaction.baru');
+                return redirect()->route('transaction.new');
             } else {
                 return redirect()->route('home');
             }

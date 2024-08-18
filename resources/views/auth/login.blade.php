@@ -39,8 +39,11 @@
 
     @if (session('errors'))
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                alert("{{ session('errors')->first() }}");
+            Swal.fire({
+                title: 'Error!',
+                text: "{{ session('errors')->first() }}",
+                icon: 'error',
+                confirmButtonText: 'OK'
             });
         </script>
     @endif

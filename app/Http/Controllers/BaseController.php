@@ -1,16 +1,15 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\QueryException;
 
 abstract class BaseController extends Controller
 {
-    protected function saveModel(Request $request, $model): JsonResponse
+    protected function saveModel(array $data, $model): JsonResponse
     {
         try {
-            $model->fill($request->all());
+            $model->fill($data);
             $model->save();
 
             return response()->json('Data saved successfully', 200);

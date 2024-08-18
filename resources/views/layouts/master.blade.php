@@ -46,7 +46,6 @@
 </head>
 <body class="hold-transition skin-purple-light sidebar-mini">
     <div class="wrapper">
-
         @includeIf('layouts.header')
 
         @includeIf('layouts.sidebar')
@@ -93,6 +92,7 @@
     <script src="{{ asset('AdminLTE-2/dist/js/adminlte.min.js') }}"></script>
     <!-- Validator -->
     <script src="{{ asset('js/validator.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         function preview(selector, temporaryFile, width = 200)  {

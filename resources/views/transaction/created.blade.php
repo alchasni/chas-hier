@@ -20,8 +20,8 @@
                 </div>
             </div>
             <div class="box-footer">
-                <button class="btn btn-warning btn-flat" onclick="notaKecil('{{ route('transaction.nota_kecil') }}', 'Nota Kecil')">Cetak Ulang Nota</button>
-                <button class="btn btn-warning btn-flat" onclick="notaBesar('{{ route('transaction.nota_besar') }}', 'Nota PDF')">Cetak Ulang Nota</button>
+                <button class="btn btn-warning btn-flat" onclick="printOrders('{{ route('transaction.print_orders') }}', 'Purchase Orders')">Print Purchase Orders</button>
+                <button class="btn btn-warning btn-flat" onclick="printOrdersPDF('{{ route('transaction.print_orders_pdf') }}', 'Payment Note')">Print Payment Note</button>
                 <a href="{{ route('transaction.new') }}" class="btn btn-primary btn-flat">Transaksi Baru</a>
             </div>
         </div>
@@ -34,11 +34,11 @@
     // tambahkan untuk delete cookie innerHeight terlebih dahulu
     document.cookie = "innerHeight=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-    function notaKecil(url, title) {
+    function printOrders(url, title) {
         popupCenter(url, title, 625, 500);
     }
 
-    function notaBesar(url, title) {
+    function printOrdersPDF(url, title) {
         popupCenter(url, title, 900, 675);
     }
 

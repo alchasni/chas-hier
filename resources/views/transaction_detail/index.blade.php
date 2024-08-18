@@ -6,13 +6,13 @@
 
 @push('css')
     <style>
-        .tampil-final_price {
+        .show-final_price {
             font-size: 5em;
             text-align: center;
             height: 100px;
         }
 
-        .tampil-terbilang {
+        .show-in_word {
             padding: 10px;
             background: #f0f0f0;
         }
@@ -22,7 +22,7 @@
         }
 
         @media(max-width: 768px) {
-            .tampil-final_price {
+            .show-final_price {
                 font-size: 3em;
                 height: 70px;
                 padding-top: 5px;
@@ -73,11 +73,11 @@
 
                     <div class="row">
                         <div class="col-lg-8">
-                            <div class="tampil-final_price bg-primary"></div>
-                            <div class="tampil-terbilang"></div>
+                            <div class="show-final_price bg-primary"></div>
+                            <div class="show-in_word"></div>
                         </div>
                         <div class="col-lg-4">
-                            <form action="{{ route('transaction.simpan') }}" class="form-transaction_detail" method="post">
+                            <form action="{{ route('transaction.save') }}" class="form-transaction_detail" method="post">
                                 @csrf
                                 <input type="hidden" name="transaction_id" value="{{ $transaction_id }}">
                                 <input type="hidden" name="total_price" id="total_price">
@@ -115,9 +115,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="kembali" class="col-lg-2 control-label">Kembali</label>
+                                    <label for="changerp" class="col-lg-2 control-label">Change</label>
                                     <div class="col-lg-8">
-                                        <input type="text" id="kembali" name="kembali" class="form-control" value="0" readonly>
+                                        <input type="text" id="changerp" name="changerp" class="form-control" value="0" readonly>
                                     </div>
                                 </div>
                             </form>
@@ -126,7 +126,7 @@
                 </div>
 
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Create Transaction</button>
+                    <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-save"><i class="fa fa-floppy-o"></i> Create Transaction</button>
                 </div>
             </div>
         </div>
@@ -172,36 +172,47 @@
 
             $(document).on('input', '.quantity', function () {
                 let id = $(this).data('id');
+                let product_id = $(this).data('product_id');
                 let quantity = parseInt($(this).val());
 
                 if (isNaN(quantity)) {
                     $(this).val(1);
-                    alert('Quantity is Invalid');
-                    return;
+                    alert('Quantity cannot be less than 1');
+                    quantity = 1;
                 }
                 if (isNaN(quantity) || quantity < 1) {
                     $(this).val(1);
                     alert('Quantity cannot be less than 1');
-                    return;
+                    quantity = 1;
                 }
                 if (quantity > 10000) {
                     $(this).val(10000);
                     alert('Quantity cannot be more than 10000');
-                    return;
+                    quantity = 10000;
                 }
 
-                $.post(`{{ url('/transaction_detail') }}/${id}`, {
-                    '_token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'put',
-                    'quantity': quantity
-                })
-                    .done(response => {
-                        $(this).on('mouseout', function () {
-                            table.ajax.reload(() => loadForm());
-                        });
+                $.get(`{{ url('/product/${product_id}') }}`)
+                    .done((response) => {
+                        if (quantity > response.stock) {
+                            $(this).val(response.stock);
+                            alert('Quantity cannot be more than available stock');
+                            quantity = response.stock;
+                        }
+
+                        $.post(`{{ url('/transaction_detail') }}/${id}`, {
+                            '_token': $('[name=csrf-token]').attr('content'),
+                            '_method': 'put',
+                            'quantity': quantity
+                        })
+                            .done(response => {
+                                table.ajax.reload(() => loadForm());
+                            })
+                            .fail((errors) => {
+                                alert(errors.responseText);
+                            });
                     })
-                    .fail((errors) => {
-                        alert(errors.responseText);
+                    .fail(() => {
+                        showToast('error', errors.responseText || 'Failed to load data');
                     });
             });
 
@@ -215,7 +226,7 @@
                 $(this).select();
             });
 
-            $('.btn-simpan').on('click', function () {
+            $('.btn-save').on('click', function () {
                 var guestIdField = document.getElementById('guest_id');
                 var transactionTable = document.querySelector('.table-transaction_detail tbody');
 
@@ -256,9 +267,8 @@
                     $('#code').focus();
                     table.ajax.reload(() => loadForm());
                 })
-                .fail(errors => {
-                    alert('Tidak dapat menyimpan data');
-                    return;
+                .fail((errors) => {
+                    showToast('error', errors?.responseText || 'Failed to load data');
                 });
         }
 
@@ -303,13 +313,13 @@
                     $('#totalrp').val('Rp. '+ response.totalrp);
                     $('#final_pricerp').val('Rp. '+ response.final_pricerp);
                     $('#final_price').val(response.final_price);
-                    $('.tampil-final_price').text('Bayar: Rp. '+ response.final_pricerp);
-                    $('.tampil-terbilang').text(response.terbilang);
+                    $('.show-final_price').text('Bayar: Rp. '+ response.final_pricerp);
+                    $('.show-in_word').text(response.in_word);
 
-                    $('#kembali').val('Rp.'+ response.kembalirp);
+                    $('#changerp').val('Rp.'+ response.changerp);
                     if ($('#money_received').val() != 0) {
-                        $('.tampil-final_price').text('Kembali: Rp. '+ response.kembalirp);
-                        $('.tampil-terbilang').text(response.kembali_terbilang);
+                        $('.show-final_price').text('Change: Rp. '+ response.changerp);
+                        $('.show-in_word').text(response.change_in_word);
                     }
                 })
                 .fail(errors => {

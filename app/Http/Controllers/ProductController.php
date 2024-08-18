@@ -128,10 +128,9 @@ class ProductController extends BaseController
      *
      * @param Request $request
      * @param int $id
-     * @param bool $isStock
      * @return JsonResponse
      */
-    public function update(Request $request, int $id, bool $isStock = false): JsonResponse
+    public function update(Request $request, int $id): JsonResponse
     {
         $rules = [
             'name' => 'required|string|max:255',

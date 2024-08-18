@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Nota Kecil</title>
+    <title>Purchase Orders</title>
 
     <?php
     $style = '
@@ -66,7 +66,7 @@
     <p style="float: right">{{ strtoupper(auth()->user()->name) }}</p>
 </div>
 <div class="clear-both" style="clear: both;"></div>
-<p>No: {{ add_zero($penjualan->id_penjualan, 10) }}</p>
+<p>No: {{ add_zero($transaction->transaction_id, 10) }}</p>
 <p class="text-center">===================================</p>
 
 <br>
@@ -86,33 +86,29 @@
 
 <table width="100%" style="border: 0;">
     <tr>
-        <td>Total Harga:</td>
-        <td class="text-right">{{ money_number_format($penjualan->total_harga) }}</td>
+        <td>Total Price:</td>
+        <td class="text-right">{{ money_number_format($transaction->total_price) }}</td>
     </tr>
     <tr>
         <td>Total Item:</td>
-        <td class="text-right">{{ money_number_format($penjualan->total_item) }}</td>
+        <td class="text-right">{{ money_number_format($transaction->total_item_quantity) }}</td>
     </tr>
     <tr>
-        <td>Diskon:</td>
-        <td class="text-right">{{ money_number_format($penjualan->diskon) }}</td>
+        <td>Final Price:</td>
+        <td class="text-right">{{ money_number_format($transaction->final_price) }}</td>
     </tr>
     <tr>
-        <td>Total Bayar:</td>
-        <td class="text-right">{{ money_number_format($penjualan->final_price) }}</td>
+        <td>Paid:</td>
+        <td class="text-right">{{ money_number_format($transaction->money_received) }}</td>
     </tr>
     <tr>
-        <td>Diterima:</td>
-        <td class="text-right">{{ money_number_format($penjualan->diterima) }}</td>
-    </tr>
-    <tr>
-        <td>Kembali:</td>
-        <td class="text-right">{{ money_number_format($penjualan->diterima - $penjualan->final_price) }}</td>
+        <td>Change:</td>
+        <td class="text-right">{{ money_number_format($transaction->money_received - $transaction->final_price) }}</td>
     </tr>
 </table>
 
 <p class="text-center">===================================</p>
-<p class="text-center">-- TERIMA KASIH --</p>
+<p class="text-center">-- THANK YOU, COME AGAIN --</p>
 
 <script>
     let body = document.body;

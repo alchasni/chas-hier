@@ -52,10 +52,10 @@ Route::group(['middleware' => 'csrf'], function () {
 
         Route::group(['middleware' => 'level:1,2'], function () {
             Route::get('/transaksi/new', [TransactionController::class, 'create'])->name('transaction.new');
-            Route::post('/transaksi/simpan', [TransactionController::class, 'store'])->name('transaction.simpan');
-            Route::get('/transaksi/selesai', [TransactionController::class, 'selesai'])->name('transaction.selesai');
-            Route::get('/transaksi/nota-kecil', [TransactionController::class, 'notaKecil'])->name('transaction.nota_kecil');
-            Route::get('/transaksi/nota-besar', [TransactionController::class, 'notaBesar'])->name('transaction.nota_besar');
+            Route::post('/transaksi/save', [TransactionController::class, 'store'])->name('transaction.save');
+            Route::get('/transaksi/created', [TransactionController::class, 'created'])->name('transaction.created');
+            Route::get('/transaksi/print-orders', [TransactionController::class, 'printOrders'])->name('transaction.print_orders');
+            Route::get('/transaksi/print-orders-pdf', [TransactionController::class, 'printOrdersPDF'])->name('transaction.print_orders_pdf');
 
             Route::get('/transaction_detail/{id}/data', [TransactionDetailController::class, 'data'])->name('transaction_detail.data');
             Route::get('/transaction_detail/loadform/{total}/{diterima}', [TransactionDetailController::class, 'loadForm'])->name('transaction_detail.load_form');

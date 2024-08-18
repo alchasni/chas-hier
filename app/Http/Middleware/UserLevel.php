@@ -20,7 +20,6 @@ class UserLevel
         if (auth()->user() && in_array(auth()->user()->level, $level)) {
             return $next($request);
         }
-
-        return redirect()->route('dashboard')->withErrors('You cannot access that.');
+        return redirect()->route('dashboard')->withErrors(['error' => 'You cannot access that']);
     }
 }

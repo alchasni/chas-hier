@@ -37,11 +37,11 @@
         </div>
     </div>
 
-    @if (session('errors'))
+    @if ($errors->any())
         <script>
             Swal.fire({
                 title: 'Error!',
-                text: "{{ session('errors')->first() }}",
+                text: "{{ $errors->first() }}",
                 icon: 'error',
                 confirmButtonText: 'OK'
             });

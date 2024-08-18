@@ -31,10 +31,10 @@
                         <label for="foto" class="col-lg-2 control-label">Profil</label>
                         <div class="col-lg-4">
                             <input type="file" name="foto" class="form-control" id="foto"
-                                onchange="preview('.tampil-foto', this.files[0])">
+                                onchange="preview('.show-photo', this.files[0])">
                             <span class="help-block with-errors"></span>
                             <br>
-                            <div class="tampil-foto">
+                            <div class="show-photo">
                                 <img src="{{ url($profil->foto ?? '/') }}" width="200">
                             </div>
                         </div>
@@ -42,7 +42,7 @@
                     <div class="form-group row">
                         <label for="old_password" class="col-lg-2 control-label">Password Lama</label>
                         <div class="col-lg-6">
-                            <input type="password" name="old_password" id="old_password" class="form-control" 
+                            <input type="password" name="old_password" id="old_password" class="form-control"
                             minlength="6">
                             <span class="help-block with-errors"></span>
                         </div>
@@ -50,7 +50,7 @@
                     <div class="form-group row">
                         <label for="password" class="col-lg-2 control-label">Password</label>
                         <div class="col-lg-6">
-                            <input type="password" name="password" id="password" class="form-control" 
+                            <input type="password" name="password" id="password" class="form-control"
                             minlength="6">
                             <span class="help-block with-errors"></span>
                         </div>
@@ -58,7 +58,7 @@
                     <div class="form-group row">
                         <label for="password_confirmation" class="col-lg-2 control-label">Konfirmasi Password</label>
                         <div class="col-lg-6">
-                            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" 
+                            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control"
                                 data-match="#password">
                             <span class="help-block with-errors"></span>
                         </div>
@@ -93,7 +93,7 @@
                 })
                 .done(response => {
                     $('[name=name]').val(response.name);
-                    $('.tampil-foto').html(`<img src="{{ url('/') }}${response.foto}" width="200">`);
+                    $('.show-photo').html(`<img src="{{ url('/') }}${response.foto}" width="200">`);
                     $('.img-profil').attr('src', `{{ url('/') }}/${response.foto}`);
 
                     $('.alert').fadeIn();
@@ -103,7 +103,7 @@
                 })
                 .fail(errors => {
                     if (errors.status == 422) {
-                        alert(errors.responseJSON); 
+                        alert(errors.responseJSON);
                     } else {
                         alert('Tidak dapat menyimpan data');
                     }

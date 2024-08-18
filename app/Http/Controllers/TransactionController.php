@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade as PDF;
 use DateTime;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class TransactionController extends Controller
+class TransactionController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -29,45 +31,49 @@ class TransactionController extends Controller
     /**
      * @throws Exception
      */
-    public function data()
+    public function data(): JsonResponse
     {
-        $transactions = Transaction::with('guest')
-            ->where('is_temp', false)
-            ->orderBy('transaction_id', 'desc')
-            ->get();
+        try {
+            $transactions = Transaction::with('guest')
+                ->where('is_temp', false)
+                ->orderBy('transaction_id', 'desc')
+                ->get();
 
-        return datatables()
-            ->of($transactions)
-            ->addIndexColumn()
-            ->addColumn('total_item_quantity', function ($transaction) {
-                return money_number_format($transaction->total_item_quantity);
-            })
-            ->addColumn('total_price', function ($transaction) {
-                return 'Rp. '. money_number_format($transaction->total_price);
-            })
-            ->addColumn('final_price', function ($transaction) {
-                return 'Rp. '. money_number_format($transaction->final_price);
-            })
-            ->addColumn('date', function ($transaction) {
-                return to_date_string($transaction->created_at, false);
-            })
-            ->addColumn('member_code', function ($transaction) {
-                $guest = $transaction->guest->member_code ?? '';
-                return '<span class="label label-success">'. $guest .'</spa>';
-            })
-            ->editColumn('user_name', function ($transaction) {
-                return $transaction->user->name ?? '';
-            })
-            ->addColumn('action', function ($transaction) {
-                return '
+            return datatables()
+                ->of($transactions)
+                ->addIndexColumn()
+                ->addColumn('total_item_quantity', function ($transaction) {
+                    return money_number_format($transaction->total_item_quantity);
+                })
+                ->addColumn('total_price', function ($transaction) {
+                    return 'Rp. '. money_number_format($transaction->total_price);
+                })
+                ->addColumn('final_price', function ($transaction) {
+                    return 'Rp. '. money_number_format($transaction->final_price);
+                })
+                ->addColumn('date', function ($transaction) {
+                    return to_date_string($transaction->created_at, false);
+                })
+                ->addColumn('member_code', function ($transaction) {
+                    $guest = $transaction->guest->member_code ?? '';
+                    return '<span class="label label-success">'. $guest .'</spa>';
+                })
+                ->editColumn('user_name', function ($transaction) {
+                    return $transaction->user->name ?? '';
+                })
+                ->addColumn('action', function ($transaction) {
+                    return '
                 <div class="btn-group">
                     <button onclick="showDetail(`'. route('transaction.show', $transaction->transaction_id) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
                     <button onclick="deleteData(`'. route('transaction.destroy', $transaction->transaction_id) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 </div>
                 ';
-            })
-            ->rawColumns(['action', 'member_code'])
-            ->make(true);
+                })
+                ->rawColumns(['action', 'member_code'])
+                ->make(true);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'Failed to load data'], 500);
+        }
     }
 
     /**
@@ -105,24 +111,37 @@ class TransactionController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $transaction = Transaction::findOrFail($request->transaction_id);
-        $transaction->update([
-            'guest_id' => $request->guest_id,
-            'total_item_quantity' => $request->total_item_quantity,
-            'total_price' => $request->total_price,
-            'final_price' => $request->final_price,
-            'money_received' => $request->money_received,
-            'is_temp' => false,
+        $validatedData = $request->validate([
+            'total_item_quantity' => 'required|integer|min:0',
+            'total_price' => 'required|numeric|min:0',
+            'final_price' => 'required|numeric|min:0',
+            'money_received' => 'required|numeric|min:0',
         ]);
 
-        foreach (TransactionDetail::where('transaction_id', $transaction->transaction_id)->get() as $item) {
+        $transaction = Transaction::findOrFail($request->transaction_id);
+
+        $details = TransactionDetail::where('transaction_id', $transaction->transaction_id)->get();
+        foreach ($details as $item) {
             $product = Product::find($item->product_id);
-            if ($product) {
-                $product->decrement('stock', $item->quantity);
+            if ($product && $product->stock < $item->quantity) {
+                return redirect()->back()->withErrors(['error' => 'Product stock is insufficient for product: ' . $product->name]);
             }
         }
 
-        return redirect()->route('transaction.selesai');
+        $transaction->fill($validatedData);
+        $transaction->is_temp = false;
+        $this->saveModel($validatedData, $transaction);
+
+        $details = TransactionDetail::where('transaction_id', $transaction->transaction_id)->get();
+        foreach ($details as $item) {
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $product->stock -= $item->quantity;
+                $product->save();
+            }
+        }
+
+        return redirect()->route('transaction.created');
     }
 
     public function show($id)
@@ -155,25 +174,27 @@ class TransactionController extends Controller
     {
         $transaction = Transaction::find($id);
         if ($transaction) {
-            foreach (TransactionDetail::where('transaction_id', $transaction->transaction_id)->get() as $item) {
+            $details = TransactionDetail::where('transaction_id', $transaction->transaction_id)->get();
+            foreach ($details as $item) {
                 $product = Product::find($item->product_id);
                 if ($product) {
-                    $product->increment('stock', $item->quantity);
+                    $product->stock += $item->quantity;
+                    $product->save();
                 }
                 $item->delete();
             }
             $transaction->delete();
-            return response(null, 204);
+            return response()->json(['message' => 'Successfully deleted the data'], 200);
         }
         return response()->json(['error' => 'Transaction not found'], 404);
     }
 
-    public function selesai()
+    public function created()
     {
-        return view('transaction.selesai');
+        return view('transaction.created');
     }
 
-    public function notaKecil()
+    public function printOrders()
     {
         $transaction = Transaction::find(session('transaction_id'));
         if (! $transaction) {
@@ -183,10 +204,10 @@ class TransactionController extends Controller
             ->where('transaction_id', session('transaction_id'))
             ->get();
 
-        return view('transaction.nota_kecil', compact('transaction', 'detail'));
+        return view('transaction.print_orders', compact('transaction', 'detail'));
     }
 
-    public function notaBesar()
+    public function printOrdersPDF()
     {
         $transaction = Transaction::find(session('transaction_id'));
         if (! $transaction) {
@@ -196,7 +217,7 @@ class TransactionController extends Controller
             ->where('transaction_id', session('transaction_id'))
             ->get();
 
-        $pdf = PDF::loadView('transaction.nota_besar', compact('transaction', 'detail'));
+        $pdf = PDF::loadView('transaction.print_orders_pdf', compact('transaction', 'detail'));
         $pdf->setPaper(0,0,609,440, 'potrait');
         return $pdf->stream('transaction-'. date('Y-m-d-his') .'.pdf');
     }

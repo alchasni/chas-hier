@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Nota PDF</title>
+    <title>Payment Note</title>
 
     <style>
         table td {
@@ -46,7 +46,7 @@
     </tr>
     <tr>
         <td>Kode Member</td>
-        <td>: {{ $penjualan->member->kode_member ?? '' }}</td>
+        <td>: {{ $transaction->guest->code ?? '' }}</td>
     </tr>
 </table>
 
@@ -77,23 +77,19 @@
     <tfoot>
     <tr>
         <td colspan="6" class="text-right"><b>Total Harga</b></td>
-        <td class="text-right"><b>{{ money_number_format($penjualan->total_price) }}</b></td>
-    </tr>
-    <tr>
-        <td colspan="6" class="text-right"><b>Diskon</b></td>
-        <td class="text-right"><b>{{ money_number_format($penjualan->discount) }}</b></td>
+        <td class="text-right"><b>{{ money_number_format($transaction->total_price) }}</b></td>
     </tr>
     <tr>
         <td colspan="6" class="text-right"><b>Total Bayar</b></td>
-        <td class="text-right"><b>{{ money_number_format($penjualan->final_price) }}</b></td>
+        <td class="text-right"><b>{{ money_number_format($transaction->final_price) }}</b></td>
     </tr>
     <tr>
         <td colspan="6" class="text-right"><b>Diterima</b></td>
-        <td class="text-right"><b>{{ money_number_format($penjualan->diterima) }}</b></td>
+        <td class="text-right"><b>{{ money_number_format($transaction->money_received) }}</b></td>
     </tr>
     <tr>
-        <td colspan="6" class="text-right"><b>Kembali</b></td>
-        <td class="text-right"><b>{{ money_number_format($penjualan->diterima - $penjualan->final_price) }}</b></td>
+        <td colspan="6" class="text-right"><b>Change</b></td>
+        <td class="text-right"><b>{{ money_number_format($transaction->money_received - $transaction->final_price) }}</b></td>
     </tr>
     </tfoot>
 </table>

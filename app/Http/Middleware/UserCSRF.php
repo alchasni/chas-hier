@@ -28,6 +28,6 @@ class UserCSRF
         auth()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login')->withErrors('Your session has expired.');
+        return redirect()->route('login')->withErrors(['error' => 'Your session has expired']);
     }
 }

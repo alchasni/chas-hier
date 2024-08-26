@@ -16,13 +16,13 @@
             <div class="box-body">
                 <div class="alert alert-success alert-dismissible">
                     <i class="fa fa-check icon"></i>
-                    Data Transaksi telah selesai.
+                    Transaction successfully created.
                 </div>
             </div>
             <div class="box-footer">
                 <button class="btn btn-warning btn-flat" onclick="printOrders('{{ route('transaction.print_orders') }}', 'Purchase Orders')">Print Purchase Orders</button>
                 <button class="btn btn-warning btn-flat" onclick="printOrdersPDF('{{ route('transaction.print_orders_pdf') }}', 'Payment Note')">Print Payment Note</button>
-                <a href="{{ route('transaction.new') }}" class="btn btn-primary btn-flat">Transaksi Baru</a>
+                <a href="{{ route('transaction.new') }}" class="btn btn-primary btn-flat">New Transaction</a>
             </div>
         </div>
     </div>

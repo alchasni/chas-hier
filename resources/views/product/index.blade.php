@@ -26,15 +26,13 @@
                         @csrf
                         <table class="table table-striped table-bordered">
                             <thead>
-                            <th width="5%">
-                                <input type="checkbox" name="select_all" id="select_all">
-                            </th>
+                            <th width="5%"><input type="checkbox" name="select_all" id="select_all"></th>
                             <th>Name</th>
                             <th>Category</th>
                             <th>Buy price</th>
                             <th>Sell price</th>
                             <th>Stock</th>
-                            <th><i class="fa fa-cog"></i></th>
+                            <th width="15%"><i class="fa fa-cog"></i></th>
                             </thead>
                         </table>
                     </form>

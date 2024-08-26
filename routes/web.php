@@ -51,11 +51,11 @@ Route::group(['middleware' => 'csrf'], function () {
         });
 
         Route::group(['middleware' => 'level:1,2'], function () {
-            Route::get('/transaksi/new', [TransactionController::class, 'create'])->name('transaction.new');
-            Route::post('/transaksi/save', [TransactionController::class, 'store'])->name('transaction.save');
-            Route::get('/transaksi/created', [TransactionController::class, 'created'])->name('transaction.created');
-            Route::get('/transaksi/print-orders', [TransactionController::class, 'printOrders'])->name('transaction.print_orders');
-            Route::get('/transaksi/print-orders-pdf', [TransactionController::class, 'printOrdersPDF'])->name('transaction.print_orders_pdf');
+            Route::get('/transaction/new', [TransactionController::class, 'create'])->name('transaction.new');
+            Route::post('/transaction/save', [TransactionController::class, 'store'])->name('transaction.save');
+            Route::get('/transaction/created', [TransactionController::class, 'created'])->name('transaction.created');
+            Route::get('/transaction/print-orders', [TransactionController::class, 'printOrders'])->name('transaction.print_orders');
+            Route::get('/transaction/print-orders-pdf', [TransactionController::class, 'printOrdersPDF'])->name('transaction.print_orders_pdf');
 
             Route::get('/transaction_detail/{id}/data', [TransactionDetailController::class, 'data'])->name('transaction_detail.data');
             Route::get('/transaction_detail/loadform/{total}/{diterima}', [TransactionDetailController::class, 'loadForm'])->name('transaction_detail.load_form');
@@ -73,8 +73,8 @@ Route::group(['middleware' => 'csrf'], function () {
         });
 
         Route::group(['middleware' => 'level:1,2'], function () {
-            Route::get('/profil', [UserController::class, 'profil'])->name('user.profil');
-            Route::post('/profil', [UserController::class, 'updateProfil'])->name('user.update_profil');
+            Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
+            Route::post('/profile', [UserController::class, 'updateProfile'])->name('profile.show');
         });
     });
 });

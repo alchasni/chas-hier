@@ -2,7 +2,7 @@
     <section class="sidebar">
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="{{ url(auth()->user()->foto ?? '') }}" class="img-circle img-profil" alt="User Image">
+                <img src="{{ url(auth()->user()->photo ?? '') }}" class="img-circle img-profile" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p class="user-name">{{ auth()->user()->name }}</p>
@@ -57,11 +57,6 @@
                 <li>
                     <a href="{{ route('user.index') }}">
                         <i class="fa fa-users"></i> <span>User</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('transaction.index') }}">
-                        <i class="fa fa-cart-arrow-down"></i> <span>Transaksi Aktif</span>
                     </a>
                 </li>
                 <li>

@@ -20,7 +20,7 @@
                     <table class="table table-stiped table-bordered">
                         <thead>
                         <th>Name</th>
-                        <th><i class="fa fa-cog"></i></th>
+                        <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>
                     </table>
                 </div>

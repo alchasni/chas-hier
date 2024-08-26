@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="box">
-            <form action="{{ route('user.update_profil') }}" method="post" class="form-profil" data-toggle="validator" enctype="multipart/form-data">
+            <form action="{{ route('profile.show') }}" method="post" class="form-profile" data-toggle="validator" enctype="multipart/form-data">
                 @csrf
                 <div class="box-body">
                     <div class="alert alert-info alert-dismissible" style="display: none;">
@@ -23,19 +23,19 @@
                     <div class="form-group row">
                         <label for="name" class="col-lg-2 control-label">Nama</label>
                         <div class="col-lg-6">
-                            <input type="text" name="name" class="form-control" id="name" required autofocus value="{{ $profil->name }}">
+                            <input type="text" name="name" class="form-control" id="name" required autofocus value="{{ $profile->name }}">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="foto" class="col-lg-2 control-label">Profil</label>
+                        <label for="photo" class="col-lg-2 control-label">Profil</label>
                         <div class="col-lg-4">
-                            <input type="file" name="foto" class="form-control" id="foto"
+                            <input type="file" name="photo" class="form-control" id="photo"
                                 onchange="preview('.show-photo', this.files[0])">
                             <span class="help-block with-errors"></span>
                             <br>
                             <div class="show-photo">
-                                <img src="{{ url($profil->foto ?? '/') }}" width="200">
+                                <img src="{{ url($profile->photo ?? '/') }}" width="200">
                             </div>
                         </div>
                     </div>
@@ -81,20 +81,20 @@
             else $('#password, #password_confirmation').attr('required', false);
         });
 
-        $('.form-profil').validator().on('submit', function (e) {
+        $('.form-profile').validator().on('submit', function (e) {
             if (! e.preventDefault()) {
                 $.ajax({
-                    url: $('.form-profil').attr('action'),
-                    type: $('.form-profil').attr('method'),
-                    data: new FormData($('.form-profil')[0]),
+                    url: $('.form-profile').attr('action'),
+                    type: $('.form-profile').attr('method'),
+                    data: new FormData($('.form-profile')[0]),
                     async: false,
                     processData: false,
                     contentType: false
                 })
                 .done(response => {
                     $('[name=name]').val(response.name);
-                    $('.show-photo').html(`<img src="{{ url('/') }}${response.foto}" width="200">`);
-                    $('.img-profil').attr('src', `{{ url('/') }}/${response.foto}`);
+                    $('.show-photo').html(`<img src="{{ url('/') }}${response.photo}" width="200">`);
+                    $('.img-profile').attr('src', `{{ url('/') }}/${response.photo}`);
 
                     $('.alert').fadeIn();
                     setTimeout(() => {

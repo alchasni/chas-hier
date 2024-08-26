@@ -1,120 +1,76 @@
 @extends('layouts.master')
 
 @section('title')
-    Daftar User
+    User
 @endsection
 
 @section('breadcrumb')
     @parent
-    <li class="active">Daftar User</li>
+    <li class="active">User</li>
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-lg-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <button onclick="addForm('{{ route('user.store') }}')" class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Tambah</button>
-            </div>
-            <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered">
-                    <thead>
-                        <th width="5%">No</th>
-                        <th>Nama</th>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <button onclick="createOne('{{ route('user.store') }}')" class="btn btn-success btn-sm btn-flat"><i class="fa fa-plus-circle"></i></button>
+                </div>
+                <div class="box-body table-responsive">
+                    <table class="table table-stiped table-bordered">
+                        <thead>
+                        <th>Name</th>
                         <th>Email</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
-                    </thead>
-                </table>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-@includeIf('user.form')
+    @includeIf('user.form')
 @endsection
 
 @push('scripts')
-<script>
-    let table;
+    <script>
+        let table;
 
-    $(function () {
-        table = $('.table').DataTable({
-            processing: true,
-            autoWidth: false,
-            ajax: {
-                url: '{{ route('user.data') }}',
-            },
-            columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'name'},
-                {data: 'email'},
-                {data: 'aksi', searchable: false, sortable: false},
-            ]
-        });
-
-        $('#modal-form').validator().on('submit', function (e) {
-            if (! e.preventDefault()) {
-                $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
-                    .done((response) => {
-                        $('#modal-form').modal('hide');
-                        table.ajax.reload();
-                    })
-                    .fail((errors) => {
-                        alert('Tidak dapat menyimpan data');
-                        return;
-                    });
-            }
-        });
-    });
-
-    function addForm(url) {
-        $('#modal-form').modal('show');
-        $('#modal-form .modal-title').text('Tambah User');
-
-        $('#modal-form form')[0].reset();
-        $('#modal-form form').attr('action', url);
-        $('#modal-form [name=_method]').val('post');
-        $('#modal-form [name=name]').focus();
-
-        $('#password, #password_confirmation').attr('required', true);
-    }
-
-    function editForm(url) {
-        $('#modal-form').modal('show');
-        $('#modal-form .modal-title').text('Edit User');
-
-        $('#modal-form form')[0].reset();
-        $('#modal-form form').attr('action', url);
-        $('#modal-form [name=_method]').val('put');
-        $('#modal-form [name=name]').focus();
-
-        $('#password, #password_confirmation').attr('required', false);
-
-        $.get(url)
-            .done((response) => {
-                $('#modal-form [name=name]').val(response.name);
-                $('#modal-form [name=email]').val(response.email);
-            })
-            .fail((errors) => {
-                alert('Tidak dapat menampilkan data');
-                return;
+        $(function () {
+            table = $('.table').DataTable({
+                processing: true,
+                autoWidth: false,
+                ajax: {
+                    url: '{{ route('user.data') }}',
+                },
+                columns: [
+                    {data: 'name'},
+                    {data: 'email'},
+                    {data: 'action', searchable: false, sortable: false},
+                ]
             });
-    }
+            handleFormSubmit();
+        });
 
-    function deleteData(url) {
-        if (confirm('Yakin ingin menghapus data terpilih?')) {
-            $.post(url, {
-                    '_token': $('[name=csrf-token]').attr('content'),
-                    '_method': 'delete'
-                })
+        function createOne(url) {
+            openModal('#modal-form', 'Create User', '#modal-form form', url);
+        }
+
+        function updateOne(url) {
+            openModal('#modal-form', 'Edit User', '#modal-form form', url, 'put');
+
+            $.get(url)
                 .done((response) => {
-                    table.ajax.reload();
+                    $('#modal-form [name=name]').val(response.name);
+                    $('#modal-form [name=email]').val(response.email);
                 })
                 .fail((errors) => {
-                    alert('Tidak dapat menghapus data');
-                    return;
+                    showToast('error', errors?.responseText || 'Failed to load data');
                 });
         }
-    }
-</script>
+
+        function deleteData(url) {
+            showConfirmToast(`Are you sure you want to delete "${name}"?`, url, 'Successfully deleted the data', 'Failed to delete data')
+        }
+    </script>
 @endpush

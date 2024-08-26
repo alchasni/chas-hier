@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $query->where('level', '!=', 1);
     }
+
+    public function scopeIsLowerLevel($query, $level)
+    {
+        return $query->where('level', '<', $level);
+    }
 }

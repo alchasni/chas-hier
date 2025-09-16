@@ -13,7 +13,7 @@ class CreateTransactionTable extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('transaction', function (Blueprint $table) {
             $table->increments('transaction_id');
             $table->integer('guest_id')->unsigned()->nullable();
             $table->integer('user_id')->unsigned();

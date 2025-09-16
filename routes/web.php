@@ -33,6 +33,19 @@ Route::group(['middleware' => 'csrf'], function () {
             Route::get('/api/transaction', [TransactionController::class, 'getTransactionByDate']);
         });
 
+        Route::group(['middleware' => 'level:1,2'], function () {
+            Route::get('/transaction/new', [TransactionController::class, 'create'])->name('transaction.new');
+            Route::post('/transaction/save', [TransactionController::class, 'store'])->name('transaction.save');
+            Route::get('/transaction/created', [TransactionController::class, 'created'])->name('transaction.created');
+            Route::get('/transaction/print-orders', [TransactionController::class, 'printOrders'])->name('transaction.print_orders');
+            Route::get('/transaction/print-orders-pdf', [TransactionController::class, 'printOrdersPDF'])->name('transaction.print_orders_pdf');
+
+            Route::get('/transaction_detail/{id}/data', [TransactionDetailController::class, 'data'])->name('transaction_detail.data');
+            Route::get('/transaction_detail/loadform/{total}/{diterima}', [TransactionDetailController::class, 'loadForm'])->name('transaction_detail.load_form');
+            Route::resource('/transaction_detail', TransactionDetailController::class)
+                ->except('create', 'show', 'edit');
+        });
+
         Route::group(['middleware' => 'level:1'], function () {
             Route::get('/category/data', [CategoryController::class, 'data'])->name('category.data');
             Route::resource('/category', CategoryController::class);
@@ -48,22 +61,7 @@ Route::group(['middleware' => 'csrf'], function () {
             Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction.index');
             Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('transaction.show');
             Route::delete('/transaction/{id}', [TransactionController::class, 'destroy'])->name('transaction.destroy');
-        });
 
-        Route::group(['middleware' => 'level:1,2'], function () {
-            Route::get('/transaction/new', [TransactionController::class, 'create'])->name('transaction.new');
-            Route::post('/transaction/save', [TransactionController::class, 'store'])->name('transaction.save');
-            Route::get('/transaction/created', [TransactionController::class, 'created'])->name('transaction.created');
-            Route::get('/transaction/print-orders', [TransactionController::class, 'printOrders'])->name('transaction.print_orders');
-            Route::get('/transaction/print-orders-pdf', [TransactionController::class, 'printOrdersPDF'])->name('transaction.print_orders_pdf');
-
-            Route::get('/transaction_detail/{id}/data', [TransactionDetailController::class, 'data'])->name('transaction_detail.data');
-            Route::get('/transaction_detail/loadform/{total}/{diterima}', [TransactionDetailController::class, 'loadForm'])->name('transaction_detail.load_form');
-            Route::resource('/transaction_detail', TransactionDetailController::class)
-                ->except('create', 'show', 'edit');
-        });
-
-        Route::group(['middleware' => 'level:1'], function () {
             Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
             Route::get('/laporan/data/{awal}/{akhir}', [LaporanController::class, 'data'])->name('laporan.data');
             Route::get('/laporan/pdf/{awal}/{akhir}', [LaporanController::class, 'exportPDF'])->name('laporan.export_pdf');

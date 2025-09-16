@@ -21,6 +21,18 @@ class CreateGuestTable extends Migration
             $table->string('phone_number');
             $table->timestamps();
         });
+
+        Schema::create('loan', function (Blueprint $table) {
+            $table->increments('loan_id');
+            $table->integer('amount');
+            $table->unsignedInteger('guest_idz');
+            $table->foreign('guest_idz')
+                ->references('guest_id')
+                ->on('guest')
+                ->restrictOnUpdate()
+                ->restrictOnDelete();
+            $table->timestamps();
+        });
     }
 
     /**
